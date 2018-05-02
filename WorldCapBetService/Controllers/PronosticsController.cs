@@ -10,57 +10,57 @@ using WorldCapBetService.Models;
 namespace WorldCapBetService.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Teams")]
-    public class TeamsController : Controller
+    [Route("api/Pronostics")]
+    public class PronosticsController : Controller
     {
         private readonly Context _context;
 
-        public TeamsController(Context context)
+        public PronosticsController(Context context)
         {
             _context = context;
         }
 
-        // GET: api/Teams
+        // GET: api/Pronostics
         [HttpGet]
-        public IEnumerable<Team> GetTeam()
+        public IEnumerable<Pronostic> GetPronostic()
         {
-            return _context.Team;
+            return _context.Pronostic;
         }
 
-        // GET: api/Teams/5
+        // GET: api/Pronostics/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTeam([FromRoute] long id)
+        public async Task<IActionResult> GetPronostic([FromRoute] long id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var team = await _context.Team.SingleOrDefaultAsync(m => m.Id == id);
+            var pronostic = await _context.Pronostic.SingleOrDefaultAsync(m => m.Id == id);
 
-            if (team == null)
+            if (pronostic == null)
             {
                 return NotFound();
             }
 
-            return Ok(team);
+            return Ok(pronostic);
         }
 
-        // PUT: api/Teams/5
+        // PUT: api/Pronostics/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTeam([FromRoute] long id, [FromBody] Team team)
+        public async Task<IActionResult> PutPronostic([FromRoute] long id, [FromBody] Pronostic pronostic)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != team.Id)
+            if (id != pronostic.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(team).State = EntityState.Modified;
+            _context.Entry(pronostic).State = EntityState.Modified;
 
             try
             {
@@ -68,7 +68,7 @@ namespace WorldCapBetService.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TeamExists(id))
+                if (!PronosticExists(id))
                 {
                     return NotFound();
                 }
@@ -81,45 +81,45 @@ namespace WorldCapBetService.Controllers
             return NoContent();
         }
 
-        // POST: api/Teams
+        // POST: api/Pronostics
         [HttpPost]
-        public async Task<IActionResult> PostTeam([FromBody] Team team)
+        public async Task<IActionResult> PostPronostic([FromBody] Pronostic pronostic)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Team.Add(team);
+            _context.Pronostic.Add(pronostic);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTeam", new { id = team.Id }, team);
+            return CreatedAtAction("GetPronostic", new { id = pronostic.Id }, pronostic);
         }
 
-        // DELETE: api/Teams/5
+        // DELETE: api/Pronostics/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTeam([FromRoute] long id)
+        public async Task<IActionResult> DeletePronostic([FromRoute] long id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var team = await _context.Team.SingleOrDefaultAsync(m => m.Id == id);
-            if (team == null)
+            var pronostic = await _context.Pronostic.SingleOrDefaultAsync(m => m.Id == id);
+            if (pronostic == null)
             {
                 return NotFound();
             }
 
-            _context.Team.Remove(team);
+            _context.Pronostic.Remove(pronostic);
             await _context.SaveChangesAsync();
 
-            return Ok(team);
+            return Ok(pronostic);
         }
 
-        private bool TeamExists(long id)
+        private bool PronosticExists(long id)
         {
-            return _context.Team.Any(e => e.Id == id);
+            return _context.Pronostic.Any(e => e.Id == id);
         }
     }
 }

@@ -10,57 +10,57 @@ using WorldCapBetService.Models;
 namespace WorldCapBetService.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Teams")]
-    public class TeamsController : Controller
+    [Route("api/Matches")]
+    public class MatchesController : Controller
     {
         private readonly Context _context;
 
-        public TeamsController(Context context)
+        public MatchesController(Context context)
         {
             _context = context;
         }
 
-        // GET: api/Teams
+        // GET: api/Matches
         [HttpGet]
-        public IEnumerable<Team> GetTeam()
+        public IEnumerable<Match> GetMatch()
         {
-            return _context.Team;
+            return _context.Match;
         }
 
-        // GET: api/Teams/5
+        // GET: api/Matches/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTeam([FromRoute] long id)
+        public async Task<IActionResult> GetMatch([FromRoute] long id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var team = await _context.Team.SingleOrDefaultAsync(m => m.Id == id);
+            var match = await _context.Match.SingleOrDefaultAsync(m => m.Id == id);
 
-            if (team == null)
+            if (match == null)
             {
                 return NotFound();
             }
 
-            return Ok(team);
+            return Ok(match);
         }
 
-        // PUT: api/Teams/5
+        // PUT: api/Matches/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTeam([FromRoute] long id, [FromBody] Team team)
+        public async Task<IActionResult> PutMatch([FromRoute] long id, [FromBody] Match match)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != team.Id)
+            if (id != match.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(team).State = EntityState.Modified;
+            _context.Entry(match).State = EntityState.Modified;
 
             try
             {
@@ -68,7 +68,7 @@ namespace WorldCapBetService.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TeamExists(id))
+                if (!MatchExists(id))
                 {
                     return NotFound();
                 }
@@ -81,45 +81,45 @@ namespace WorldCapBetService.Controllers
             return NoContent();
         }
 
-        // POST: api/Teams
+        // POST: api/Matches
         [HttpPost]
-        public async Task<IActionResult> PostTeam([FromBody] Team team)
+        public async Task<IActionResult> PostMatch([FromBody] Match match)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Team.Add(team);
+            _context.Match.Add(match);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTeam", new { id = team.Id }, team);
+            return CreatedAtAction("GetMatch", new { id = match.Id }, match);
         }
 
-        // DELETE: api/Teams/5
+        // DELETE: api/Matches/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTeam([FromRoute] long id)
+        public async Task<IActionResult> DeleteMatch([FromRoute] long id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var team = await _context.Team.SingleOrDefaultAsync(m => m.Id == id);
-            if (team == null)
+            var match = await _context.Match.SingleOrDefaultAsync(m => m.Id == id);
+            if (match == null)
             {
                 return NotFound();
             }
 
-            _context.Team.Remove(team);
+            _context.Match.Remove(match);
             await _context.SaveChangesAsync();
 
-            return Ok(team);
+            return Ok(match);
         }
 
-        private bool TeamExists(long id)
+        private bool MatchExists(long id)
         {
-            return _context.Team.Any(e => e.Id == id);
+            return _context.Match.Any(e => e.Id == id);
         }
     }
 }

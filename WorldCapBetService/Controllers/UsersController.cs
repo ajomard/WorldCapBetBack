@@ -10,57 +10,57 @@ using WorldCapBetService.Models;
 namespace WorldCapBetService.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Teams")]
-    public class TeamsController : Controller
+    [Route("api/Users")]
+    public class UsersController : Controller
     {
         private readonly Context _context;
 
-        public TeamsController(Context context)
+        public UsersController(Context context)
         {
             _context = context;
         }
 
-        // GET: api/Teams
+        // GET: api/Users
         [HttpGet]
-        public IEnumerable<Team> GetTeam()
+        public IEnumerable<User> GetUser()
         {
-            return _context.Team;
+            return _context.User;
         }
 
-        // GET: api/Teams/5
+        // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTeam([FromRoute] long id)
+        public async Task<IActionResult> GetUser([FromRoute] long id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var team = await _context.Team.SingleOrDefaultAsync(m => m.Id == id);
+            var user = await _context.User.SingleOrDefaultAsync(m => m.Id == id);
 
-            if (team == null)
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return Ok(team);
+            return Ok(user);
         }
 
-        // PUT: api/Teams/5
+        // PUT: api/Users/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTeam([FromRoute] long id, [FromBody] Team team)
+        public async Task<IActionResult> PutUser([FromRoute] long id, [FromBody] User user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != team.Id)
+            if (id != user.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(team).State = EntityState.Modified;
+            _context.Entry(user).State = EntityState.Modified;
 
             try
             {
@@ -68,7 +68,7 @@ namespace WorldCapBetService.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TeamExists(id))
+                if (!UserExists(id))
                 {
                     return NotFound();
                 }
@@ -81,45 +81,45 @@ namespace WorldCapBetService.Controllers
             return NoContent();
         }
 
-        // POST: api/Teams
+        // POST: api/Users
         [HttpPost]
-        public async Task<IActionResult> PostTeam([FromBody] Team team)
+        public async Task<IActionResult> PostUser([FromBody] User user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Team.Add(team);
+            _context.User.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTeam", new { id = team.Id }, team);
+            return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
-        // DELETE: api/Teams/5
+        // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTeam([FromRoute] long id)
+        public async Task<IActionResult> DeleteUser([FromRoute] long id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var team = await _context.Team.SingleOrDefaultAsync(m => m.Id == id);
-            if (team == null)
+            var user = await _context.User.SingleOrDefaultAsync(m => m.Id == id);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            _context.Team.Remove(team);
+            _context.User.Remove(user);
             await _context.SaveChangesAsync();
 
-            return Ok(team);
+            return Ok(user);
         }
 
-        private bool TeamExists(long id)
+        private bool UserExists(long id)
         {
-            return _context.Team.Any(e => e.Id == id);
+            return _context.User.Any(e => e.Id == id);
         }
     }
 }
