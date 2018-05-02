@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
-using WorldCapBetService.Models;
+using WorldCapBetService.Data;
 
 namespace WorldCapBetService.Migrations
 {
@@ -20,7 +20,7 @@ namespace WorldCapBetService.Migrations
                 .HasAnnotation("ProductVersion", "2.0.2-rtm-10011")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("WorldCapBetService.Models.Match", b =>
+            modelBuilder.Entity("WorldCapBetService.Models.Entities.Match", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
@@ -44,7 +44,7 @@ namespace WorldCapBetService.Migrations
                     b.ToTable("Match");
                 });
 
-            modelBuilder.Entity("WorldCapBetService.Models.Pronostic", b =>
+            modelBuilder.Entity("WorldCapBetService.Models.Entities.Pronostic", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
@@ -55,7 +55,7 @@ namespace WorldCapBetService.Migrations
 
                     b.Property<int>("ScoreTeam2");
 
-                    b.Property<long?>("UserId");
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
@@ -66,7 +66,7 @@ namespace WorldCapBetService.Migrations
                     b.ToTable("Pronostic");
                 });
 
-            modelBuilder.Entity("WorldCapBetService.Models.Team", b =>
+            modelBuilder.Entity("WorldCapBetService.Models.Entities.Team", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
@@ -80,18 +80,42 @@ namespace WorldCapBetService.Migrations
                     b.ToTable("Team");
                 });
 
-            modelBuilder.Entity("WorldCapBetService.Models.User", b =>
+            modelBuilder.Entity("WorldCapBetService.Models.Entities.User", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("AccessFailedCount");
+
+                    b.Property<string>("ConcurrencyStamp");
+
                     b.Property<string>("Email");
+
+                    b.Property<bool>("EmailConfirmed");
 
                     b.Property<string>("FirstName");
 
                     b.Property<string>("LastName");
 
+                    b.Property<bool>("LockoutEnabled");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("NormalizedEmail");
+
+                    b.Property<string>("NormalizedUserName");
+
                     b.Property<string>("Password");
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("SecurityStamp");
+
+                    b.Property<bool>("TwoFactorEnabled");
 
                     b.Property<string>("UserName");
 
@@ -100,24 +124,24 @@ namespace WorldCapBetService.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("WorldCapBetService.Models.Match", b =>
+            modelBuilder.Entity("WorldCapBetService.Models.Entities.Match", b =>
                 {
-                    b.HasOne("WorldCapBetService.Models.Team", "Team1")
+                    b.HasOne("WorldCapBetService.Models.Entities.Team", "Team1")
                         .WithMany()
                         .HasForeignKey("Team1Id");
 
-                    b.HasOne("WorldCapBetService.Models.Team", "Team2")
+                    b.HasOne("WorldCapBetService.Models.Entities.Team", "Team2")
                         .WithMany()
                         .HasForeignKey("Team2Id");
                 });
 
-            modelBuilder.Entity("WorldCapBetService.Models.Pronostic", b =>
+            modelBuilder.Entity("WorldCapBetService.Models.Entities.Pronostic", b =>
                 {
-                    b.HasOne("WorldCapBetService.Models.Match", "Match")
+                    b.HasOne("WorldCapBetService.Models.Entities.Match", "Match")
                         .WithMany("Pronostics")
                         .HasForeignKey("MatchId");
 
-                    b.HasOne("WorldCapBetService.Models.User", "User")
+                    b.HasOne("WorldCapBetService.Models.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
