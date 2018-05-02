@@ -15,9 +15,9 @@ namespace WorldCapBetService.Helpers
             var response = new
             {
                 id = identity.Claims.Single(c => c.Type == "id").Value,
-                username = identity.Claims.Single(c => c.Type == "username").Value,
-                firstName = identity.Claims.Single(c => c.Type == "firstName").Value,
-                lastName = identity.Claims.Single(c => c.Type == "lastName").Value,
+                //username = identity.Claims.Single(c => c.Type == "username").Value,
+                //firstName = identity.Claims.Single(c => c.Type == "firstName").Value,
+                //lastName = identity.Claims.Single(c => c.Type == "lastName").Value,
                 auth_token = await jwtFactory.GenerateEncodedToken(userName, identity),
                 expires_in = (int)jwtOptions.ValidFor.TotalSeconds
             };
