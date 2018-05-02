@@ -22,9 +22,9 @@ namespace WorldCapBetService.Controllers
 
         // GET: api/Teams
         [HttpGet]
-        public IEnumerable<Team> GetTodoItems()
+        public IEnumerable<Team> GetTeams()
         {
-            return _context.TodoItems;
+            return _context.Team;
         }
 
         // GET: api/Teams/5
@@ -36,7 +36,7 @@ namespace WorldCapBetService.Controllers
                 return BadRequest(ModelState);
             }
 
-            var team = await _context.TodoItems.SingleOrDefaultAsync(m => m.Id == id);
+            var team = await _context.Team.SingleOrDefaultAsync(m => m.Id == id);
 
             if (team == null)
             {
@@ -90,7 +90,7 @@ namespace WorldCapBetService.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.TodoItems.Add(team);
+            _context.Team.Add(team);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTeam", new { id = team.Id }, team);
@@ -105,13 +105,13 @@ namespace WorldCapBetService.Controllers
                 return BadRequest(ModelState);
             }
 
-            var team = await _context.TodoItems.SingleOrDefaultAsync(m => m.Id == id);
+            var team = await _context.Team.SingleOrDefaultAsync(m => m.Id == id);
             if (team == null)
             {
                 return NotFound();
             }
 
-            _context.TodoItems.Remove(team);
+            _context.Team.Remove(team);
             await _context.SaveChangesAsync();
 
             return Ok(team);
@@ -119,7 +119,7 @@ namespace WorldCapBetService.Controllers
 
         private bool TeamExists(long id)
         {
-            return _context.TodoItems.Any(e => e.Id == id);
+            return _context.Team.Any(e => e.Id == id);
         }
     }
 }

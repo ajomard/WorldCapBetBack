@@ -14,6 +14,7 @@ using NJsonSchema;
 using NSwag.AspNetCore;
 using WorldCapBetService.Models;
 
+
 namespace WorldCapBetService
 {
     public class Startup
@@ -28,8 +29,9 @@ namespace WorldCapBetService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<Context>(opt => opt.UseInMemoryDatabase("WordlCapBetService"));
-
+            var connection = "Server = tcp:worldcapbet.database.windows.net,1433; Initial Catalog = WorldCapBetTest; Persist Security Info = False; User ID = worldcapbet; Password =Capgemini2018; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;" ;
+            //services.AddDbContext<Context>(opt => opt.UseInMemoryDatabase("WordlCapBetService"));
+            services.AddDbContext<Context>(opt => opt.UseSqlServer(connection));
             services.AddMvc();
         }
 
