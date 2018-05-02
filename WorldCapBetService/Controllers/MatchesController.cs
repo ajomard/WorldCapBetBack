@@ -26,7 +26,9 @@ namespace WorldCapBetService.Controllers
         [HttpGet]
         public IEnumerable<Match> GetMatch()
         {
-            return _context.Match;
+            var matches = _context.Match.Include("Team1").Include("Team2");
+
+            return matches;
         }
 
         // GET: api/Matches/5
@@ -91,7 +93,8 @@ namespace WorldCapBetService.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            _context.Entry(match.Team1).State = EntityState.Unchanged;
+            _context.Entry(match.Team2).State = EntityState.Unchanged;
             _context.Match.Add(match);
             await _context.SaveChangesAsync();
 
@@ -122,6 +125,44 @@ namespace WorldCapBetService.Controllers
         private bool MatchExists(long id)
         {
             return _context.Match.Any(e => e.Id == id);
+        }
+
+        // GET: api/Pronostic/5
+        [HttpGet("Pronostic/{id}")]
+        public async Task<IActionResult> GetMatchesWithPronosticFromUser([FromRoute] string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var query = from matches in _context.Match.Include("Team1").Include("Team2")
+                        from pronostics in _context.Pronostic.Include("Match").Include("User").Where(prono => prono.Match.Id == matches.Id && prono.User.Id == id).DefaultIfEmpty()
+                        select new {
+                            matches.Id,
+                            matches.Date,
+                            matches.Team1,
+                            matches.Team2,
+                            matches.ScoreTeam1,
+                            matches.ScoreTeam2,
+                            pronostic = new
+                            {
+                                scoreTeam1 = pronostics != null ? pronostics.ScoreTeam1 : null,
+                                scoreTeam2 = pronostics != null ? pronostics.ScoreTeam2 : null
+                            }
+                        };
+
+
+            var result = await query.ToListAsync();
+
+
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
         }
     }
 }

@@ -91,7 +91,8 @@ namespace WorldCapBetService.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            _context.Entry(pronostic.User).State = EntityState.Unchanged;
+            _context.Entry(pronostic.Match).State = EntityState.Unchanged;
             _context.Pronostic.Add(pronostic);
             await _context.SaveChangesAsync();
 
@@ -123,5 +124,7 @@ namespace WorldCapBetService.Controllers
         {
             return _context.Pronostic.Any(e => e.Id == id);
         }
+
+      
     }
 }
