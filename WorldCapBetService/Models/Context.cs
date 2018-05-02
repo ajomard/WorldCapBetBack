@@ -9,6 +9,9 @@ namespace WorldCapBetService.Models
         {
         }
 
-        public DbSet<Team> TodoItems { get; set; }
+        public DbSet<Team> Team { get; set; }
+        public DbSet<Match> Match { get; set; }
+        public DbSet<Pronostic> Pronostic { get; set; }
+        public DbSet<User> User { get; set; }
     }
 }
