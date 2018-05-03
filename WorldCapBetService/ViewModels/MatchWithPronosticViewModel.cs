@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WorldCapBetService.Models.Entities;
 
-namespace WorldCapBetService.Models.Entities
+namespace WorldCapBetService.ViewModels
 {
-    public class Match
+    public class MatchWithPronosticViewModel
     {
         public long Id { get; set; }
         public DateTime Date { get; set; }
@@ -14,6 +15,6 @@ namespace WorldCapBetService.Models.Entities
         public int? ScoreTeam1 { get; set; }
         public int? ScoreTeam2 { get; set; }
 
-        //public List<Pronostic> Pronostics { get; set; }
+        public Pronostic Pronostic { get; set; }
     }
 }

@@ -11,9 +11,10 @@ using WorldCapBetService.Data;
 namespace WorldCapBetService.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20180503071440_ScoreMatchPronosticNotNull")]
+    partial class ScoreMatchPronosticNotNull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,18 +47,18 @@ namespace WorldCapBetService.Migrations
 
             modelBuilder.Entity("WorldCapBetService.Models.Entities.Pronostic", b =>
                 {
-                    b.Property<long>("PronosticId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<long?>("MatchId");
 
-                    b.Property<int?>("ScoreTeam1");
+                    b.Property<int>("ScoreTeam1");
 
-                    b.Property<int?>("ScoreTeam2");
+                    b.Property<int>("ScoreTeam2");
 
                     b.Property<string>("UserId");
 
-                    b.HasKey("PronosticId");
+                    b.HasKey("Id");
 
                     b.HasIndex("MatchId");
 

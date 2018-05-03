@@ -16,10 +16,12 @@ namespace WorldCapBetService.Controllers
     public class MatchesController : Controller
     {
         private readonly Context _context;
+        private readonly MatchDAO _matchDAO;
 
         public MatchesController(Context context)
         {
             _context = context;
+            _matchDAO = new MatchDAO(context);
         }
 
         // GET: api/Matches
@@ -129,33 +131,14 @@ namespace WorldCapBetService.Controllers
 
         // GET: api/Pronostic/5
         [HttpGet("Pronostic/{id}")]
-        public async Task<IActionResult> GetMatchesWithPronosticFromUser([FromRoute] string id)
+        public IActionResult GetMatchesWithPronosticFromUser([FromRoute] string id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var query = from matches in _context.Match.Include("Team1").Include("Team2")
-                        from pronostics in _context.Pronostic.Include("Match").Include("User").Where(prono => prono.Match.Id == matches.Id && prono.User.Id == id).DefaultIfEmpty()
-                        select new {
-                            matches.Id,
-                            matches.Date,
-                            matches.Team1,
-                            matches.Team2,
-                            matches.ScoreTeam1,
-                            matches.ScoreTeam2,
-                            pronostic = new
-                            {
-                                scoreTeam1 = pronostics != null ? pronostics.ScoreTeam1 : null,
-                                scoreTeam2 = pronostics != null ? pronostics.ScoreTeam2 : null
-                            }
-                        };
-
-
-            var result = await query.ToListAsync();
-
-
+            var result = _matchDAO.GetMatchesWithPronosticFromUser(id);
 
             if (result == null)
             {
@@ -164,5 +147,7 @@ namespace WorldCapBetService.Controllers
 
             return Ok(result);
         }
+
+     
     }
 }

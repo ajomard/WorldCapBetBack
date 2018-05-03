@@ -26,7 +26,7 @@ namespace WorldCapBetService.Controllers
         [HttpGet]
         public IEnumerable<Pronostic> GetPronostic()
         {
-            return _context.Pronostic;
+            return _context.Pronostic.Include("Match").Include("User");
         }
 
         // GET: api/Pronostics/5
@@ -38,7 +38,7 @@ namespace WorldCapBetService.Controllers
                 return BadRequest(ModelState);
             }
 
-            var pronostic = await _context.Pronostic.SingleOrDefaultAsync(m => m.Id == id);
+            var pronostic = await _context.Pronostic.Include("Match").Include("User").SingleOrDefaultAsync(m => m.PronosticId == id);
 
             if (pronostic == null)
             {
@@ -57,7 +57,7 @@ namespace WorldCapBetService.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != pronostic.Id)
+            if (id != pronostic.PronosticId)
             {
                 return BadRequest();
             }
@@ -96,7 +96,7 @@ namespace WorldCapBetService.Controllers
             _context.Pronostic.Add(pronostic);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPronostic", new { id = pronostic.Id }, pronostic);
+            return CreatedAtAction("GetPronostic", new { id = pronostic.PronosticId }, pronostic);
         }
 
         // DELETE: api/Pronostics/5
@@ -108,7 +108,7 @@ namespace WorldCapBetService.Controllers
                 return BadRequest(ModelState);
             }
 
-            var pronostic = await _context.Pronostic.SingleOrDefaultAsync(m => m.Id == id);
+            var pronostic = await _context.Pronostic.SingleOrDefaultAsync(m => m.PronosticId == id);
             if (pronostic == null)
             {
                 return NotFound();
@@ -122,7 +122,7 @@ namespace WorldCapBetService.Controllers
 
         private bool PronosticExists(long id)
         {
-            return _context.Pronostic.Any(e => e.Id == id);
+            return _context.Pronostic.Any(e => e.PronosticId == id);
         }
 
       
