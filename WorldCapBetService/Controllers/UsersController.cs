@@ -116,7 +116,7 @@ namespace WorldCapBetService.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _context.User.SingleOrDefaultAsync(m => m.Id == id);
+            var user = await _context.User.Include("Pronostics").SingleOrDefaultAsync(m => m.Id == id);
             if (user == null)
             {
                 return NotFound();

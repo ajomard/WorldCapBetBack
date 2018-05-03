@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using WorldCapBetService.Models.Entities;
 
 namespace WorldCapBetService.Controllers
 {
+    [Authorize(Policy = "ApiUser")]
     [Produces("application/json")]
     [Route("api/Matches")]
     public class MatchesController : Controller
@@ -65,7 +67,7 @@ namespace WorldCapBetService.Controllers
             {
                 return BadRequest();
             }
-
+            match.Date = match.Date.ToLocalTime();
             _context.Entry(match).State = EntityState.Modified;
 
             try
@@ -97,9 +99,10 @@ namespace WorldCapBetService.Controllers
             }
             _context.Entry(match.Team1).State = EntityState.Unchanged;
             _context.Entry(match.Team2).State = EntityState.Unchanged;
+            match.Date = match.Date.ToLocalTime();
             _context.Match.Add(match);
             await _context.SaveChangesAsync();
-
+            
             return CreatedAtAction("GetMatch", new { id = match.Id }, match);
         }
 
@@ -112,7 +115,7 @@ namespace WorldCapBetService.Controllers
                 return BadRequest(ModelState);
             }
 
-            var match = await _context.Match.SingleOrDefaultAsync(m => m.Id == id);
+            var match = await _context.Match.Include("Pronostics").SingleOrDefaultAsync(m => m.Id == id);
             if (match == null)
             {
                 return NotFound();

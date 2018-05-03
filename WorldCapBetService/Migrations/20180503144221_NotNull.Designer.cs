@@ -11,8 +11,8 @@ using WorldCapBetService.Data;
 namespace WorldCapBetService.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20180503074013_RenameIdTablePronostic")]
-    partial class RenameIdTablePronostic
+    [Migration("20180503144221_NotNull")]
+    partial class NotNull
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -47,18 +47,19 @@ namespace WorldCapBetService.Migrations
 
             modelBuilder.Entity("WorldCapBetService.Models.Entities.Pronostic", b =>
                 {
-                    b.Property<long>("PronosticId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<long?>("MatchId");
+                    b.Property<long>("MatchId");
 
                     b.Property<int?>("ScoreTeam1");
 
                     b.Property<int?>("ScoreTeam2");
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
-                    b.HasKey("PronosticId");
+                    b.HasKey("Id");
 
                     b.HasIndex("MatchId");
 
@@ -139,12 +140,14 @@ namespace WorldCapBetService.Migrations
             modelBuilder.Entity("WorldCapBetService.Models.Entities.Pronostic", b =>
                 {
                     b.HasOne("WorldCapBetService.Models.Entities.Match", "Match")
-                        .WithMany()
-                        .HasForeignKey("MatchId");
+                        .WithMany("Pronostics")
+                        .HasForeignKey("MatchId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("WorldCapBetService.Models.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                        .WithMany("Pronostics")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

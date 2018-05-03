@@ -34,6 +34,8 @@ namespace WorldCapBetService.Data
                 result.ScoreTeam1 = match.ScoreTeam1;
                 result.ScoreTeam2 = match.ScoreTeam2;
                 result.Pronostic = pronostic;
+                //if (result.Pronostic != null)
+                //    result.Pronostic.Match = null;
 
                 results.Add(result);
             }

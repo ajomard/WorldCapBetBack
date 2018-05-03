@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using WorldCapBetService.Models.Entities;
 
 namespace WorldCapBetService.Controllers
 {
+    [Authorize(Policy = "ApiUser")]
     [Produces("application/json")]
     [Route("api/Pronostics")]
     public class PronosticsController : Controller
@@ -38,7 +40,7 @@ namespace WorldCapBetService.Controllers
                 return BadRequest(ModelState);
             }
 
-            var pronostic = await _context.Pronostic.Include("Match").Include("User").SingleOrDefaultAsync(m => m.PronosticId == id);
+            var pronostic = await _context.Pronostic.Include("Match").Include("User").SingleOrDefaultAsync(m => m.Id == id);
 
             if (pronostic == null)
             {
@@ -57,7 +59,7 @@ namespace WorldCapBetService.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != pronostic.PronosticId)
+            if (id != pronostic.Id)
             {
                 return BadRequest();
             }
@@ -91,12 +93,17 @@ namespace WorldCapBetService.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            if(pronostic.Match.Date <= DateTime.Now)
+            {
+                return BadRequest("Cannot bet on already played match");
+            }
             _context.Entry(pronostic.User).State = EntityState.Unchanged;
             _context.Entry(pronostic.Match).State = EntityState.Unchanged;
             _context.Pronostic.Add(pronostic);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPronostic", new { id = pronostic.PronosticId }, pronostic);
+            return CreatedAtAction("GetPronostic", new { id = pronostic.Id }, pronostic);
         }
 
         // DELETE: api/Pronostics/5
@@ -108,7 +115,7 @@ namespace WorldCapBetService.Controllers
                 return BadRequest(ModelState);
             }
 
-            var pronostic = await _context.Pronostic.SingleOrDefaultAsync(m => m.PronosticId == id);
+            var pronostic = await _context.Pronostic.SingleOrDefaultAsync(m => m.Id == id);
             if (pronostic == null)
             {
                 return NotFound();
@@ -122,7 +129,7 @@ namespace WorldCapBetService.Controllers
 
         private bool PronosticExists(long id)
         {
-            return _context.Pronostic.Any(e => e.PronosticId == id);
+            return _context.Pronostic.Any(e => e.Id == id);
         }
 
       

@@ -11,8 +11,8 @@ using WorldCapBetService.Data;
 namespace WorldCapBetService.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20180502200135_ScoreMatchNull")]
-    partial class ScoreMatchNull
+    [Migration("20180503141856_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -143,7 +143,7 @@ namespace WorldCapBetService.Migrations
                         .HasForeignKey("MatchId");
 
                     b.HasOne("WorldCapBetService.Models.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Pronostics")
                         .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618

@@ -11,5 +11,7 @@ namespace WorldCapBetService.Models.Entities
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Password { get; set; }
+
+        public ICollection<Pronostic> Pronostics { get; set; }
     }
 }

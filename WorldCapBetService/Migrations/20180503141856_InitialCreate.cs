@@ -21,6 +21,7 @@ namespace WorldCapBetService.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Team", x => x.Id);
+                    
                 });
 
             migrationBuilder.CreateTable(
@@ -58,8 +59,8 @@ namespace WorldCapBetService.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Date = table.Column<DateTime>(nullable: false),
-                    ScoreTeam1 = table.Column<int>(nullable: false),
-                    ScoreTeam2 = table.Column<int>(nullable: false),
+                    ScoreTeam1 = table.Column<int>(nullable: true),
+                    ScoreTeam2 = table.Column<int>(nullable: true),
                     Team1Id = table.Column<long>(nullable: true),
                     Team2Id = table.Column<long>(nullable: true)
                 },
@@ -87,8 +88,8 @@ namespace WorldCapBetService.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     MatchId = table.Column<long>(nullable: true),
-                    ScoreTeam1 = table.Column<int>(nullable: false),
-                    ScoreTeam2 = table.Column<int>(nullable: false),
+                    ScoreTeam1 = table.Column<int>(nullable: true),
+                    ScoreTeam2 = table.Column<int>(nullable: true),
                     UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

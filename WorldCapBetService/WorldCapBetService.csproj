@@ -5,6 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20180503134930_ADDFK.cs" />
+    <Compile Remove="Migrations\20180503134930_ADDFK.Designer.cs" />
+    <Compile Remove="Migrations\20180503135125_ADDFK.cs" />
+    <Compile Remove="Migrations\20180503135125_ADDFK.Designer.cs" />
+    <Compile Remove="Migrations\20180503135414_ADDFK.cs" />
+    <Compile Remove="Migrations\20180503135414_ADDFK.Designer.cs" />
+    <Compile Remove="Migrations\20180503135612_ADDFK.cs" />
+    <Compile Remove="Migrations\20180503135612_ADDFK.Designer.cs" />
+    <Compile Remove="Migrations\20180503144325_NotNullMatch.cs" />
+    <Compile Remove="Migrations\20180503144325_NotNullMatch.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

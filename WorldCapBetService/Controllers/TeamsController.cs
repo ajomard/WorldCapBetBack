@@ -28,7 +28,7 @@ namespace WorldCapBetService.Controllers
         [HttpGet]
         public IEnumerable<Team> GetTeam()
         {
-            return _context.Team;
+            return _context.Team.OrderBy(t => t.Name);
         }
 
         // GET: api/Teams/5
