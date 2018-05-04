@@ -45,7 +45,7 @@ namespace WorldCapBetService.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            credentials.Password = PasswordHelper.HashPassword(credentials.Password);
             var identity = await GetClaimsIdentity(credentials.UserName, credentials.Password);
             if (identity == null)
             {

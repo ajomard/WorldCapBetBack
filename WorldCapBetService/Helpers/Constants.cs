@@ -20,8 +20,5 @@ namespace WorldCapBetService.Helpers
                 public const string AdminAccess = "Admin";
             }
         }
-
-        public const string Admin = "Admin";
-        public const string User = "User";
     }
 }

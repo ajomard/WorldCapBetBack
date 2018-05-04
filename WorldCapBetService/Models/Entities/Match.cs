@@ -11,9 +11,7 @@ namespace WorldCapBetService.Models.Entities
     {
         public long Id { get; set; }
         public DateTime Date { get; set; }
-        [Required]
         public Team Team1 { get; set; }
-        [Required]
         public Team Team2 { get; set; }
         public int? ScoreTeam1 { get; set; }
         public int? ScoreTeam2 { get; set; }

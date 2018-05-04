@@ -106,8 +106,6 @@ namespace WorldCapBetService
             // api user claim policy
             services.AddAuthorization(options =>
             {
-                //options.AddPolicy("ApiUser", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol, Constants.Strings.JwtClaims.UserAccess));
-                //options.AddPolicy("ApiAdmin", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol, Constants.Strings.JwtClaims.AdminAccess));
                 options.AddPolicy("ApiAdmin", policy => policy.AddRequirements(new UserRoleRequirement("Admin")));
                 options.AddPolicy("ApiUser", policy => policy.AddRequirements(new UserRoleRequirement("User")));
             });
@@ -121,7 +119,7 @@ namespace WorldCapBetService
                 o.Password.RequireLowercase = false;
                 o.Password.RequireUppercase = false;
                 o.Password.RequireNonAlphanumeric = false;
-                o.Password.RequiredLength = 6;
+                o.Password.RequiredLength = 1;
             });
             identityBuilder = new IdentityBuilder(identityBuilder.UserType, typeof(IdentityRole), identityBuilder.Services);
             identityBuilder.AddEntityFrameworkStores<Context>().AddDefaultTokenProviders();

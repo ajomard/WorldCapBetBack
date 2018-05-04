@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -102,7 +103,9 @@ namespace WorldCapBetService.Controllers
             {
                 return BadRequest(ModelState);
             }
-            user.Role = Constants.User;
+            user.Password = PasswordHelper.HashPassword(user.Password);
+
+            user.Role = Constants.Strings.JwtClaims.UserAccess;
             var result = await _userManager.CreateAsync(user, user.Password);
             if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
 
@@ -139,6 +142,7 @@ namespace WorldCapBetService.Controllers
             return _context.User.Any(e => e.Id == id);
         }
 
+        
         
     }
 }
