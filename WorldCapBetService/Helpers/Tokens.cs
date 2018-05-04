@@ -10,15 +10,14 @@ namespace WorldCapBetService.Helpers
 {
     public class Tokens
     {
-        public static async Task<string> GenerateJwt(ClaimsIdentity identity, IJwtFactory jwtFactory, string userName, JwtIssuerOptions jwtOptions, JsonSerializerSettings serializerSettings)
+        public static async Task<string> GenerateJwt(ClaimsIdentity identity, IJwtFactory jwtFactory, string email, JwtIssuerOptions jwtOptions, JsonSerializerSettings serializerSettings)
         {
             var response = new
             {
                 id = identity.Claims.Single(c => c.Type == "id").Value,
-                username = identity.Claims.Single(c => c.Type == "username").Value,
                 firstName = identity.Claims.Single(c => c.Type == "firstName").Value,
                 lastName = identity.Claims.Single(c => c.Type == "lastName").Value,
-                auth_token = await jwtFactory.GenerateEncodedToken(userName, identity),
+                auth_token = await jwtFactory.GenerateEncodedToken(email, identity),
                 expires_in = (int)jwtOptions.ValidFor.TotalSeconds,
                 role = identity.Claims.Single(c => c.Type == Constants.Strings.JwtClaimIdentifiers.Rol).Value
             };

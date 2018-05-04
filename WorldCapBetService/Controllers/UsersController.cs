@@ -97,16 +97,20 @@ namespace WorldCapBetService.Controllers
         // POST: api/Users
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> PostUser([FromBody] User user)
+        public async Task<IActionResult> PostUser([FromBody] RegistrationViewModel userVm)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            user.Password = PasswordHelper.HashPassword(user.Password);
-
+            //user.Password = PasswordHelper.HashPassword(user.Password);
+            User user = new User();
+            user.FirstName = userVm.FirstName;
+            user.Email = userVm.Email;
+            user.UserName = userVm.Email;
+            user.LastName = userVm.LastName;
             user.Role = Constants.Strings.JwtClaims.UserAccess;
-            var result = await _userManager.CreateAsync(user, user.Password);
+            var result = await _userManager.CreateAsync(user, userVm.Password);
             if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
 
            // _context.User.Add(user);

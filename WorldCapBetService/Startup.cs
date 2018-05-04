@@ -120,6 +120,7 @@ namespace WorldCapBetService
                 o.Password.RequireUppercase = false;
                 o.Password.RequireNonAlphanumeric = false;
                 o.Password.RequiredLength = 1;
+                o.User.RequireUniqueEmail = true;
             });
             identityBuilder = new IdentityBuilder(identityBuilder.UserType, typeof(IdentityRole), identityBuilder.Services);
             identityBuilder.AddEntityFrameworkStores<Context>().AddDefaultTokenProviders();

@@ -20,11 +20,11 @@ namespace WorldCapBetService.Auth
             ThrowIfInvalidOptions(_jwtOptions);
         }
 
-        public async Task<string> GenerateEncodedToken(string userName, ClaimsIdentity identity)
+        public async Task<string> GenerateEncodedToken(string email, ClaimsIdentity identity)
         {
             var claims = new[]
          {
-                 new Claim(JwtRegisteredClaimNames.Sub, userName),
+                 new Claim(JwtRegisteredClaimNames.Sub, email),
                  new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
                  new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64),
                  identity.FindFirst(Helpers.Constants.Strings.JwtClaimIdentifiers.Rol),
@@ -47,12 +47,11 @@ namespace WorldCapBetService.Auth
 
         public ClaimsIdentity GenerateClaimsIdentity(User user, string id)
         {
-            return new ClaimsIdentity(new GenericIdentity(user.UserName, "Token"), new[]
+            return new ClaimsIdentity(new GenericIdentity(user.Email, "Token"), new[]
             {
                 new Claim(Helpers.Constants.Strings.JwtClaimIdentifiers.Id, id),
                 new Claim(Helpers.Constants.Strings.JwtClaimIdentifiers.FirstName, user.FirstName),
                 new Claim(Helpers.Constants.Strings.JwtClaimIdentifiers.LastName, user.LastName),
-                new Claim(Helpers.Constants.Strings.JwtClaimIdentifiers.UserName, user.UserName),
                 new Claim(Helpers.Constants.Strings.JwtClaimIdentifiers.Rol, user.Role)
             });
         }
