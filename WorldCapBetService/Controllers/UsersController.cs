@@ -98,6 +98,7 @@ namespace WorldCapBetService.Controllers
             {
                 return BadRequest(ModelState);
             }
+            user.Role = Constants.User;
             var result = await _userManager.CreateAsync(user, user.Password);
             if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
 

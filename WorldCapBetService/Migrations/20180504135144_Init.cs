@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace WorldCapBetService.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,7 +21,6 @@ namespace WorldCapBetService.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Team", x => x.Id);
-                    
                 });
 
             migrationBuilder.CreateTable(
@@ -61,8 +60,8 @@ namespace WorldCapBetService.Migrations
                     Date = table.Column<DateTime>(nullable: false),
                     ScoreTeam1 = table.Column<int>(nullable: true),
                     ScoreTeam2 = table.Column<int>(nullable: true),
-                    Team1Id = table.Column<long>(nullable: true),
-                    Team2Id = table.Column<long>(nullable: true)
+                    Team1Id = table.Column<long>(nullable: false),
+                    Team2Id = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -87,10 +86,10 @@ namespace WorldCapBetService.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    MatchId = table.Column<long>(nullable: true),
+                    MatchId = table.Column<long>(nullable: false),
                     ScoreTeam1 = table.Column<int>(nullable: true),
                     ScoreTeam2 = table.Column<int>(nullable: true),
-                    UserId = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -100,13 +99,13 @@ namespace WorldCapBetService.Migrations
                         column: x => x.MatchId,
                         principalTable: "Match",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Pronostic_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

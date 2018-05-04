@@ -19,5 +19,8 @@ namespace WorldCapBetService.Helpers
                 public const string ApiAccess = "api_access";
             }
         }
+
+        public const string Admin = "Admin";
+        public const string User = "User";
     }
 }

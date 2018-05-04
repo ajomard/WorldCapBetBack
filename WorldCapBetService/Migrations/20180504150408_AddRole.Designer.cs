@@ -11,8 +11,8 @@ using WorldCapBetService.Data;
 namespace WorldCapBetService.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20180503141856_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20180504150408_AddRole")]
+    partial class AddRole
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,9 +32,9 @@ namespace WorldCapBetService.Migrations
 
                     b.Property<int?>("ScoreTeam2");
 
-                    b.Property<long?>("Team1Id");
+                    b.Property<long>("Team1Id");
 
-                    b.Property<long?>("Team2Id");
+                    b.Property<long>("Team2Id");
 
                     b.HasKey("Id");
 
@@ -50,13 +50,14 @@ namespace WorldCapBetService.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<long?>("MatchId");
+                    b.Property<long>("MatchId");
 
                     b.Property<int?>("ScoreTeam1");
 
                     b.Property<int?>("ScoreTeam2");
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -114,6 +115,8 @@ namespace WorldCapBetService.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
+                    b.Property<string>("Role");
+
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
@@ -129,22 +132,26 @@ namespace WorldCapBetService.Migrations
                 {
                     b.HasOne("WorldCapBetService.Models.Entities.Team", "Team1")
                         .WithMany()
-                        .HasForeignKey("Team1Id");
+                        .HasForeignKey("Team1Id")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("WorldCapBetService.Models.Entities.Team", "Team2")
                         .WithMany()
-                        .HasForeignKey("Team2Id");
+                        .HasForeignKey("Team2Id")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("WorldCapBetService.Models.Entities.Pronostic", b =>
                 {
                     b.HasOne("WorldCapBetService.Models.Entities.Match", "Match")
                         .WithMany("Pronostics")
-                        .HasForeignKey("MatchId");
+                        .HasForeignKey("MatchId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("WorldCapBetService.Models.Entities.User", "User")
                         .WithMany("Pronostics")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

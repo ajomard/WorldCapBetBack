@@ -11,8 +11,8 @@ using WorldCapBetService.Data;
 namespace WorldCapBetService.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20180503144658_NotNullMatch")]
-    partial class NotNullMatch
+    [Migration("20180504135144_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
