@@ -16,7 +16,8 @@ namespace WorldCapBetService.Helpers
 
             public static class JwtClaims
             {
-                public const string ApiAccess = "api_access";
+                public const string UserAccess = "User";
+                public const string AdminAccess = "Admin";
             }
         }
 

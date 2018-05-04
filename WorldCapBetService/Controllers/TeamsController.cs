@@ -12,7 +12,6 @@ using WorldCapBetService.Models.Entities;
 
 namespace WorldCapBetService.Controllers
 {
-    [Authorize(Policy = "ApiUser")]
     [Produces("application/json")]
     [Route("api/Teams")]
     public class TeamsController : Controller
@@ -25,6 +24,8 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Teams
+        //[Authorize(Policy = "ApiUser")]
+        [Authorize(Policy = "ApiAdmin")]
         [HttpGet]
         public IEnumerable<Team> GetTeam()
         {
@@ -32,6 +33,8 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Teams/5
+        //[Authorize(Policy = "ApiUser")]
+        [Authorize(Policy = "ApiAdmin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTeam([FromRoute] long id)
         {
@@ -51,6 +54,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // PUT: api/Teams/5
+        [Authorize(Policy = "ApiAdmin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTeam([FromRoute] long id, [FromBody] Team team)
         {
@@ -86,6 +90,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // POST: api/Teams
+        [Authorize(Policy = "ApiAdmin")]
         [HttpPost]
         public async Task<IActionResult> PostTeam([FromBody] Team team)
         {
@@ -101,6 +106,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // DELETE: api/Teams/5
+        [Authorize(Policy = "ApiAdmin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTeam([FromRoute] long id)
         {

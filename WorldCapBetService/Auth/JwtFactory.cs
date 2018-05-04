@@ -53,7 +53,7 @@ namespace WorldCapBetService.Auth
                 new Claim(Helpers.Constants.Strings.JwtClaimIdentifiers.FirstName, user.FirstName),
                 new Claim(Helpers.Constants.Strings.JwtClaimIdentifiers.LastName, user.LastName),
                 new Claim(Helpers.Constants.Strings.JwtClaimIdentifiers.UserName, user.UserName),
-                new Claim(Helpers.Constants.Strings.JwtClaimIdentifiers.Rol, Helpers.Constants.Strings.JwtClaims.ApiAccess)
+                new Claim(Helpers.Constants.Strings.JwtClaimIdentifiers.Rol, user.Role)
             });
         }
 

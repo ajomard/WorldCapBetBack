@@ -12,7 +12,6 @@ using WorldCapBetService.Models.Entities;
 
 namespace WorldCapBetService.Controllers
 {
-    [Authorize(Policy = "ApiUser")]
     [Produces("application/json")]
     [Route("api/Matches")]
     public class MatchesController : Controller
@@ -27,6 +26,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Matches
+        [Authorize(Policy = "ApiUser")]
         [HttpGet]
         public IEnumerable<Match> GetMatch()
         {
@@ -36,6 +36,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Matches/5
+        [Authorize(Policy = "ApiUser")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMatch([FromRoute] long id)
         {
@@ -55,6 +56,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // PUT: api/Matches/5
+        [Authorize(Policy = "ApiAdmin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMatch([FromRoute] long id, [FromBody] Match match)
         {
@@ -90,6 +92,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // POST: api/Matches
+        [Authorize(Policy = "ApiAdmin")]
         [HttpPost]
         public async Task<IActionResult> PostMatch([FromBody] Match match)
         {
@@ -107,6 +110,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // DELETE: api/Matches/5
+        [Authorize(Policy = "ApiAdmin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMatch([FromRoute] long id)
         {
@@ -133,6 +137,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Pronostic/5
+        [Authorize(Policy = "ApiUser")]
         [HttpGet("Pronostic/{id}")]
         public IActionResult GetMatchesWithPronosticFromUser([FromRoute] string id)
         {

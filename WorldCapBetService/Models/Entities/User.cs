@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WorldCapBetService.Models.Entities
 {
-    public class User : IdentityUser
+    public class User : IdentityUser, IAuthorizationRequirement
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

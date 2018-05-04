@@ -12,7 +12,6 @@ using WorldCapBetService.Models.Entities;
 
 namespace WorldCapBetService.Controllers
 {
-    [Authorize(Policy = "ApiUser")]
     [Produces("application/json")]
     [Route("api/Pronostics")]
     public class PronosticsController : Controller
@@ -25,6 +24,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Pronostics
+        [Authorize(Policy = "ApiUser")]
         [HttpGet]
         public IEnumerable<Pronostic> GetPronostic()
         {
@@ -32,6 +32,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Pronostics/5
+        [Authorize(Policy = "ApiUser")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPronostic([FromRoute] long id)
         {
@@ -51,6 +52,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // PUT: api/Pronostics/5
+        [Authorize(Policy = "ApiUser")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPronostic([FromRoute] long id, [FromBody] Pronostic pronostic)
         {
@@ -86,6 +88,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // POST: api/Pronostics
+        [Authorize(Policy = "ApiUser")]
         [HttpPost]
         public async Task<IActionResult> PostPronostic([FromBody] Pronostic pronostic)
         {
@@ -107,6 +110,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // DELETE: api/Pronostics/5
+        [Authorize(Policy = "ApiAdmin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePronostic([FromRoute] long id)
         {

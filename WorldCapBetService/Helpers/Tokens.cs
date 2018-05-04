@@ -19,7 +19,8 @@ namespace WorldCapBetService.Helpers
                 firstName = identity.Claims.Single(c => c.Type == "firstName").Value,
                 lastName = identity.Claims.Single(c => c.Type == "lastName").Value,
                 auth_token = await jwtFactory.GenerateEncodedToken(userName, identity),
-                expires_in = (int)jwtOptions.ValidFor.TotalSeconds
+                expires_in = (int)jwtOptions.ValidFor.TotalSeconds,
+                role = identity.Claims.Single(c => c.Type == Constants.Strings.JwtClaimIdentifiers.Rol).Value
             };
 
             return JsonConvert.SerializeObject(response, serializerSettings);

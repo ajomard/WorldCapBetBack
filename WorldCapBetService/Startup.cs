@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -105,8 +106,12 @@ namespace WorldCapBetService
             // api user claim policy
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("ApiUser", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol, Constants.Strings.JwtClaims.ApiAccess));
+                //options.AddPolicy("ApiUser", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol, Constants.Strings.JwtClaims.UserAccess));
+                //options.AddPolicy("ApiAdmin", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol, Constants.Strings.JwtClaims.AdminAccess));
+                options.AddPolicy("ApiAdmin", policy => policy.AddRequirements(new UserRoleRequirement("Admin")));
+                options.AddPolicy("ApiUser", policy => policy.AddRequirements(new UserRoleRequirement("User")));
             });
+            services.AddSingleton<IAuthorizationHandler, UserRoleHandler>();
 
             // add identity
             var identityBuilder = services.AddIdentityCore<User>(o =>
