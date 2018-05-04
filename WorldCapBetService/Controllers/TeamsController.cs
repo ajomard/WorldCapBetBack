@@ -115,6 +115,10 @@ namespace WorldCapBetService.Controllers
                 return NotFound();
             }
 
+            //delete associated matches
+            var matches = _context.Match.Include("Pronostics").Where(m => m.Team1.Id == team.Id || m.Team2.Id == team.Id);
+            _context.Match.RemoveRange(matches);
+
             _context.Team.Remove(team);
             await _context.SaveChangesAsync();
 
