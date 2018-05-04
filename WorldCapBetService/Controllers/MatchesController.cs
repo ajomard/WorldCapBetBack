@@ -26,7 +26,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Matches
-        [Authorize(Policy = "ApiUser")]
+        [Authorize(Policy = "ApiAdmin")]
         [HttpGet]
         public IEnumerable<Match> GetMatch()
         {
@@ -36,7 +36,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Matches/5
-        [Authorize(Policy = "ApiUser")]
+        [Authorize(Policy = "ApiAdmin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMatch([FromRoute] long id)
         {

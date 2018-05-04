@@ -30,6 +30,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Users
+        [Authorize(Policy = "ApiAdmin")]
         [HttpGet]
         public IEnumerable<User> GetUser()
         {
@@ -37,6 +38,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Users/5
+        [Authorize(Policy = "ApiAdmin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser([FromRoute] string id)
         {
@@ -56,6 +58,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // PUT: api/Users/5
+        [Authorize(Policy = "ApiAdmin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser([FromRoute] string id, [FromBody] User user)
         {
@@ -91,6 +94,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // POST: api/Users
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> PostUser([FromBody] User user)
         {
@@ -109,6 +113,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // DELETE: api/Users/5
+        [Authorize(Policy = "ApiAdmin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser([FromRoute] string id)
         {
