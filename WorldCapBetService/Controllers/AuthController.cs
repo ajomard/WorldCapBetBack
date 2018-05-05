@@ -22,7 +22,6 @@ namespace WorldCapBetService.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly IJwtFactory _jwtFactory;
-        private readonly JsonSerializerSettings _serializerSettings;
         private readonly JwtIssuerOptions _jwtOptions;
 
         public AuthController(UserManager<User> userManager, IJwtFactory jwtFactory, IOptions<JwtIssuerOptions> jwtOptions)
@@ -30,11 +29,6 @@ namespace WorldCapBetService.Controllers
             _userManager = userManager;
             _jwtFactory = jwtFactory;
             _jwtOptions = jwtOptions.Value;
-
-            _serializerSettings = new JsonSerializerSettings
-            {
-                Formatting = Formatting.Indented
-            };
         }
 
         // POST api/auth/login
@@ -45,7 +39,6 @@ namespace WorldCapBetService.Controllers
             {
                 return BadRequest(ModelState);
             }
-            //credentials.Password = PasswordHelper.HashPassword(credentials.Password);
             var identity = await GetClaimsIdentity(credentials.Email, credentials.Password);
             if (identity == null)
             {

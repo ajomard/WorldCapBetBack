@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WorldCapBetService.Data;
-using WorldCapBetService.Models;
 using WorldCapBetService.Models.Entities;
 
 namespace WorldCapBetService.Controllers
@@ -17,12 +14,12 @@ namespace WorldCapBetService.Controllers
     public class MatchesController : Controller
     {
         private readonly Context _context;
-        private readonly MatchDAO _matchDAO;
+        private readonly MatchDao _matchDAO;
 
         public MatchesController(Context context)
         {
             _context = context;
-            _matchDAO = new MatchDAO(context);
+            _matchDAO = new MatchDao(context);
         }
 
         // GET: api/Matches
@@ -105,7 +102,7 @@ namespace WorldCapBetService.Controllers
             match.Date = match.Date.ToLocalTime();
             _context.Match.Add(match);
             await _context.SaveChangesAsync();
-            
+
             return CreatedAtAction("GetMatch", new { id = match.Id }, match);
         }
 
@@ -156,6 +153,6 @@ namespace WorldCapBetService.Controllers
             return Ok(result);
         }
 
-     
+
     }
 }

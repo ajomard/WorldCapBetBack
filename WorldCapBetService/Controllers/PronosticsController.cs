@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WorldCapBetService.Data;
-using WorldCapBetService.Models;
 using WorldCapBetService.Models.Entities;
 
 namespace WorldCapBetService.Controllers
@@ -97,7 +95,7 @@ namespace WorldCapBetService.Controllers
                 return BadRequest(ModelState);
             }
 
-            if(pronostic.Match.Date <= DateTime.Now)
+            if (pronostic.Match.Date <= DateTime.Now)
             {
                 return BadRequest("Cannot bet on already played match");
             }
@@ -136,6 +134,6 @@ namespace WorldCapBetService.Controllers
             return _context.Pronostic.Any(e => e.Id == id);
         }
 
-      
+
     }
 }

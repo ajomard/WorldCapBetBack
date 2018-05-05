@@ -1,17 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WorldCapBetService.ViewModels;
 
 namespace WorldCapBetService.Data
 {
-    public class MatchDAO
+    public class MatchDao
     {
         private readonly Context _context;
 
-        public MatchDAO(Context context)
+        public MatchDao(Context context)
         {
             _context = context;
         }
@@ -22,7 +20,7 @@ namespace WorldCapBetService.Data
             var matches = _context.Match.Include("Team1").Include("Team2");
             var pronostics = _context.Pronostic.Where(p => p.User.Id == userId);
 
-            foreach(var match in matches)
+            foreach (var match in matches)
             {
                 var result = new MatchWithPronosticViewModel();
                 var pronostic = pronostics.SingleOrDefault(p => p.Match.Id == match.Id);

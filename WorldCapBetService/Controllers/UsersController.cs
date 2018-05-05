@@ -103,7 +103,7 @@ namespace WorldCapBetService.Controllers
             {
                 return BadRequest(ModelState);
             }
-            //user.Password = PasswordHelper.HashPassword(user.Password);
+
             User user = new User();
             user.FirstName = userVm.FirstName;
             user.Email = userVm.Email;
@@ -113,7 +113,6 @@ namespace WorldCapBetService.Controllers
             var result = await _userManager.CreateAsync(user, userVm.Password);
             if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
 
-           // _context.User.Add(user);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetUser", new { id = user.Id }, user);

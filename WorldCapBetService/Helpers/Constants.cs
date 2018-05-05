@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace WorldCapBetService.Helpers
+﻿namespace WorldCapBetService.Helpers
 {
     public static class Constants
     {
@@ -11,7 +6,7 @@ namespace WorldCapBetService.Helpers
         {
             public static class JwtClaimIdentifiers
             {
-                public const string Rol = "rol", Id = "id", UserName="username", FirstName="firstName", LastName="lastName";
+                public const string Rol = "rol", Id = "id", UserName = "username", FirstName = "firstName", LastName = "lastName";
             }
 
             public static class JwtClaims

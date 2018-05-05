@@ -33,7 +33,7 @@ namespace WorldCapBetService
 {
     public class Startup
     {
-        private const string SecretKey = "FilouEstUneGrossePussyQuiEstMayday"; // todo: get this from somewhere secure
+        private const string SecretKey = "FilouEstUneGrossePussyQuiEstMayday";
         private readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
 
         public Startup(IConfiguration configuration)
@@ -46,11 +46,10 @@ namespace WorldCapBetService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connection = "Server = tcp:worldcapbet.database.windows.net,1433; Initial Catalog = WorldCapBetTest; Persist Security Info = False; User ID = worldcapbet; Password =Capgemini2018; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;" ;
-            //services.AddDbContext<Context>(opt => opt.UseInMemoryDatabase("WordlCapBetService"));
+            var connection = "Server = tcp:worldcapbet.database.windows.net,1433; Initial Catalog = WorldCapBetTest; Persist Security Info = False; User ID = worldcapbet; Password =Capgemini2018; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;";
+
             services.AddDbContext<Context>(opt => opt.UseSqlServer(connection));
-            services.AddMvc().AddJsonOptions(
-                o =>
+            services.AddMvc().AddJsonOptions(o =>
                 {
                     o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 }

@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WorldCapBetService.Models.Entities
 {
@@ -11,7 +8,6 @@ namespace WorldCapBetService.Models.Entities
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        //public string Password { get; set; }
         public string Role { get; set; }
 
         public ICollection<Pronostic> Pronostics { get; set; }
