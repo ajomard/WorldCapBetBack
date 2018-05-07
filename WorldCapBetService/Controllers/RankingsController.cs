@@ -129,7 +129,7 @@ namespace WorldCapBetService.Controllers
             return _context.Rankings.Any(e => e.Id == id);
         }
 
-        //[Authorize(Policy = "ApiAdmin")]
+        [Authorize(Policy = "ApiAdmin")]
         [HttpPost("UpdateRankings")]
         public IActionResult UpdateRankings()
         {

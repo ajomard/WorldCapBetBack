@@ -33,7 +33,7 @@ namespace WorldCapBetService.Data
 
 
 
-                if (pronostic.Match.ScoreTeam1 == pronostic.ScoreTeam1 && pronostic.Match.ScoreTeam1 == pronostic.ScoreTeam2)
+                if (pronostic.Match.ScoreTeam1 == pronostic.ScoreTeam1 && pronostic.Match.ScoreTeam2 == pronostic.ScoreTeam2)
                 {
                     userScore.GoodPronosticAndGoodScore++;
                 }
