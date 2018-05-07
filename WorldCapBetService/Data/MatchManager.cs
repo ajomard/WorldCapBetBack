@@ -5,11 +5,11 @@ using WorldCapBetService.ViewModels;
 
 namespace WorldCapBetService.Data
 {
-    public class MatchDao
+    public class MatchManager
     {
         private readonly Context _context;
 
-        public MatchDao(Context context)
+        public MatchManager(Context context)
         {
             _context = context;
         }

@@ -17,6 +17,8 @@
     <Compile Remove="Migrations\20180503144325_NotNullMatch.Designer.cs" />
     <Compile Remove="Migrations\20180504193650_RemovePassword.cs" />
     <Compile Remove="Migrations\20180504193650_RemovePassword.Designer.cs" />
+    <Compile Remove="Migrations\20180507155308_Ranking.cs" />
+    <Compile Remove="Migrations\20180507155308_Ranking.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

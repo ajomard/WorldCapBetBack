@@ -14,12 +14,12 @@ namespace WorldCapBetService.Controllers
     public class MatchesController : Controller
     {
         private readonly Context _context;
-        private readonly MatchDao _matchDAO;
+        private readonly MatchManager _matchDAO;
 
         public MatchesController(Context context)
         {
             _context = context;
-            _matchDAO = new MatchDao(context);
+            _matchDAO = new MatchManager(context);
         }
 
         // GET: api/Matches

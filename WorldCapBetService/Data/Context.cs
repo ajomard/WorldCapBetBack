@@ -5,7 +5,7 @@ namespace WorldCapBetService.Data
 {
     public class Context : DbContext
     {
-        public Context(DbContextOptions<Context> options): base(options)
+        public Context(DbContextOptions<Context> options) : base(options)
         {
         }
 
@@ -13,5 +13,6 @@ namespace WorldCapBetService.Data
         public DbSet<Match> Match { get; set; }
         public DbSet<Pronostic> Pronostic { get; set; }
         public DbSet<User> User { get; set; }
+        public DbSet<Ranking> Rankings { get; set; }
     }
 }

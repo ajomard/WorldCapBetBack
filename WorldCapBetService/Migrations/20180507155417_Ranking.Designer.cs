@@ -11,9 +11,10 @@ using WorldCapBetService.Data;
 namespace WorldCapBetService.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20180507155417_Ranking")]
+    partial class Ranking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,17 +72,15 @@ namespace WorldCapBetService.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("FalsePronostic");
+                    b.Property<int?>("FalsePronostic");
 
-                    b.Property<int>("GoodGoalAverage");
+                    b.Property<int?>("GoodGoalAverage");
 
-                    b.Property<int>("GoodPronosticAndGoodScore");
+                    b.Property<int?>("GoodPronosticAndGoodScore");
 
-                    b.Property<int>("GoodPronosticOnly");
+                    b.Property<int?>("GoodPronosticOnly");
 
-                    b.Property<int>("Rank");
-
-                    b.Property<int>("Score");
+                    b.Property<int?>("Score");
 
                     b.Property<string>("UserId");
 
