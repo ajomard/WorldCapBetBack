@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WorldCapBetService.Auth;
 using WorldCapBetService.Data;
 using WorldCapBetService.Models.Entities;
 
@@ -141,6 +143,12 @@ namespace WorldCapBetService.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (!CheckClaims.CheckUser(identity, id))
+            {
+                return BadRequest("It's not you :)");
             }
 
             var result = _matchDAO.GetMatchesWithPronosticFromUser(id);

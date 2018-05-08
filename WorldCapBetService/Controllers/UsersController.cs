@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WorldCapBetService.Auth;
 using WorldCapBetService.Data;
 using WorldCapBetService.Helpers;
 using WorldCapBetService.Models;
@@ -39,13 +40,19 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Users/5
-        [Authorize(Policy = "ApiAdmin")]
+        [Authorize(Policy = "ApiUser")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser([FromRoute] string id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (!CheckClaims.CheckUser(identity, id))
+            {
+                return BadRequest("It's not you :)");
             }
 
             var user = await _context.User.SingleOrDefaultAsync(m => m.Id == id);
@@ -59,9 +66,9 @@ namespace WorldCapBetService.Controllers
         }
 
         // PUT: api/Users/5
-        [Authorize(Policy = "ApiAdmin")]
+        [Authorize(Policy = "ApiUser")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser([FromRoute] string id, [FromBody] User user)
+        public async Task<IActionResult> PutUser([FromRoute] string id, [FromBody] RegistrationViewModel user)
         {
             if (!ModelState.IsValid)
             {
@@ -73,23 +80,22 @@ namespace WorldCapBetService.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (!CheckClaims.CheckUser(identity, id))
+            {
+                return BadRequest("It's not you :)");
+            }
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            var dbUser = await _userManager.FindByIdAsync(id);
+            dbUser.FirstName = user.FirstName;
+            dbUser.LastName = user.LastName;
+
+            var result = await _userManager.UpdateAsync(dbUser);
+            if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
+            result = await _userManager.RemovePasswordAsync(dbUser);
+            if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
+            result = await _userManager.AddPasswordAsync(dbUser, user.Password);
+            if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
 
             return NoContent();
         }
@@ -113,7 +119,7 @@ namespace WorldCapBetService.Controllers
             var result = await _userManager.CreateAsync(user, userVm.Password);
             if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
 
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
@@ -140,12 +146,31 @@ namespace WorldCapBetService.Controllers
             return Ok(user);
         }
 
-        private bool UserExists(string id)
+        // DELETE: api/Users/5
+        [Authorize(Policy = "ApiAdmin")]
+        [HttpPut("resetpassword/{id}")]
+        public async Task<IActionResult> ResetPassword([FromRoute] string id)
         {
-            return _context.User.Any(e => e.Id == id);
-        }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        
-        
+            var dbUser = await _userManager.FindByIdAsync(id);
+            if (dbUser == null)
+            {
+                return NotFound();
+            }
+            var result = await _userManager.RemovePasswordAsync(dbUser);
+            if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
+
+            //set temporary password email without @capgemini.com
+            var newPassword = dbUser.Email.ToLower();
+            newPassword = newPassword.Remove(newPassword.IndexOf('@'));
+            result = await _userManager.AddPasswordAsync(dbUser, newPassword);
+            if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
+
+            return Ok(newPassword);
+        }
     }
 }

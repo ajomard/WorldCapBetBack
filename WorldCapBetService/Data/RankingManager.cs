@@ -16,8 +16,31 @@ namespace WorldCapBetService.Data
             _context = context;
         }
 
+        public void UpdateRankings()
+        {
+            DeleteAllRankings();
 
-        private Ranking CaculatePronosticFromOneUser(User user)
+            var userList = _context.User;
+            var rankList = new List<Ranking>();
+            foreach (var user in userList)
+            {
+                rankList.Add(CaculateScoreFromOneUser(user));
+            }
+
+            rankList = rankList.OrderByDescending(r => r.Score).ToList();
+            var rank = 1;
+            foreach (var ranking in rankList)
+            {
+                ranking.Rank = rank;
+                rank++;
+            }
+
+            _context.Rankings.AddRange(rankList);
+            _context.SaveChanges();
+
+        }
+
+        private Ranking CaculateScoreFromOneUser(User user)
         {
             var listPronostics = _context.Pronostic.Include("Match").Where(p => p.User.Id == user.Id && p.Match.ScoreTeam1 != null && p.Match.ScoreTeam2 != null);
             var userScore = new Ranking();
@@ -59,28 +82,7 @@ namespace WorldCapBetService.Data
 
         }
 
-        public void UpdateRankings()
-        {
-            DeleteAllRankings();
-            var userList = _context.User;
-            var rankList = new List<Ranking>();
-            foreach (var user in userList)
-            {
-                rankList.Add(CaculatePronosticFromOneUser(user));
-            }
 
-            rankList = rankList.OrderByDescending(r => r.Score).ToList();
-            var rank = 1;
-            foreach (var ranking in rankList)
-            {
-                ranking.Rank = rank;
-                rank++;
-            }
-
-            _context.Rankings.AddRange(rankList);
-            _context.SaveChanges();
-
-        }
 
 
         private void DeleteAllRankings()

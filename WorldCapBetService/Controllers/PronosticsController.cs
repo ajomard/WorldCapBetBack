@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WorldCapBetService.Auth;
 using WorldCapBetService.Data;
 using WorldCapBetService.Models.Entities;
 
@@ -64,6 +66,18 @@ namespace WorldCapBetService.Controllers
                 return BadRequest();
             }
 
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (!CheckClaims.CheckUser(identity, pronostic.User.Id))
+            {
+                return BadRequest("It's not you :)");
+            }
+
+
+            if (pronostic.Match.Date <= DateTime.Now)
+            {
+                return BadRequest("Cannot bet on already played match");
+            }
+
             _context.Entry(pronostic).State = EntityState.Modified;
 
             try
@@ -93,6 +107,12 @@ namespace WorldCapBetService.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (!CheckClaims.CheckUser(identity, pronostic.User.Id))
+            {
+                return BadRequest("It's not you :)");
             }
 
             if (pronostic.Match.Date <= DateTime.Now)

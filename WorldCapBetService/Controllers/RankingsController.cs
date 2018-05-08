@@ -25,6 +25,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Rankings
+        [Authorize(Policy = "ApiUser")]
         [HttpGet]
         public IEnumerable<Ranking> GetRankings()
         {
@@ -32,6 +33,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Rankings/5
+        [Authorize(Policy = "ApiUser")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRanking([FromRoute] int id)
         {
