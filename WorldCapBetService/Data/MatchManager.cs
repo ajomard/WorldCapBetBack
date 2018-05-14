@@ -18,7 +18,7 @@ namespace WorldCapBetService.Data
         {
             var results = new List<MatchWithPronosticViewModel>();
             var matches = _context.Match.Include("Team1").Include("Team2");
-            var pronostics = _context.Pronostic.Where(p => p.User.Id == userId);
+            var pronostics = _context.Pronostic.Include("User").Where(p => p.User.Id == userId);
 
             foreach (var match in matches)
             {

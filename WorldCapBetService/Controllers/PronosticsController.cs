@@ -115,6 +115,12 @@ namespace WorldCapBetService.Controllers
                 return BadRequest("It's not you :)");
             }
 
+
+            var isAlreadyBet = _context.Pronostic.Any(p => p.Match.Id == pronostic.Match.Id && p.User.Id == pronostic.User.Id);
+            if (isAlreadyBet)
+            {
+                return BadRequest("A bet already exists for this match/user");
+            }
             if (pronostic.Match.Date <= DateTime.Now)
             {
                 return BadRequest("Cannot bet on already played match");

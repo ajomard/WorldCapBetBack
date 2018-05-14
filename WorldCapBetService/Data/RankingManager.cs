@@ -60,7 +60,7 @@ namespace WorldCapBetService.Data
                 {
                     userScore.GoodPronosticAndGoodScore++;
                 }
-                else if (goalAverage == goalAveragePronostic)
+                else if ((isTeam1Winner && isPronosticTeam1Winner || !isTeam1Winner && !isPronosticTeam1Winner) && goalAverage == goalAveragePronostic)
                 {
                     userScore.GoodGoalAverage++;
                 }
