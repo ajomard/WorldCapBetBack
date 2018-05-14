@@ -161,6 +161,32 @@ namespace WorldCapBetService.Controllers
             return Ok(result);
         }
 
+        // GET: api/Pronostic/5
+        [Authorize(Policy = "ApiUser")]
+        [HttpGet("TodayPronostic/{id}")]
+        public IActionResult GetTodayMatchesWithPronosticFromUser([FromRoute] string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (!CheckClaims.CheckUser(identity, id))
+            {
+                return BadRequest("It's not you :)");
+            }
+
+            var result = _matchDAO.GetTodayMatchesWithPronosticFromUser(id);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
 
     }
 }
