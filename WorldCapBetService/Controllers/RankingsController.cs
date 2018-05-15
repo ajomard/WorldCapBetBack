@@ -52,6 +52,27 @@ namespace WorldCapBetService.Controllers
             return Ok(ranking);
         }
 
+        // GET: api/UserRanking/5
+        [Authorize(Policy = "ApiUser")]
+        [HttpGet("UserRanking/{userId}")]
+        public ActionResult GetUserRanking([FromRoute] string userId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var ranking = _context.Rankings.Include("User").Where(r => r.User.Id == userId);
+
+
+            if (ranking == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(ranking);
+        }
+
         // PUT: api/Rankings/5
         [Authorize(Policy = "ApiAdmin")]
         [HttpPut("{id}")]
