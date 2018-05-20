@@ -161,5 +161,26 @@ namespace WorldCapBetService.Controllers
             return Ok();
         }
 
+        // GET: api/ChartsAvererage/5
+        [Authorize(Policy = "ApiUser")]
+        [HttpGet("ChartsAverage/{userId}")]
+        public ActionResult GetChartsAvererage([FromRoute] string userId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var chart = _rankingManager.GetAverageStatsFromUser(userId);
+
+
+            if (chart == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(chart);
+        }
+
     }
 }
