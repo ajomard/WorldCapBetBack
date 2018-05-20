@@ -16,12 +16,11 @@ namespace WorldCapBetService.Data
             _context = context;
         }
 
-        public ChartAverageStats GetAverageStatsFromUser(string userId)
+        public IList<GroupingBar> GetAverageStatsFromUser(string userId)
         {
             var user = _context.User.SingleOrDefault(u => u.Id == userId);
             if (user != null)
             {
-                //chartAverageStats.UserStats = _context.Rankings.SingleOrDefault(r => r.User.Id == userId);
                 var allRankings = _context.Rankings.ToList();
                 var averageGoodPronosticAndGoodScore = allRankings.Average(r => r.GoodPronosticAndGoodScore);
                 var averageGoodGoalAverage = _context.Rankings.Average(r => r.GoodGoalAverage);
@@ -32,14 +31,15 @@ namespace WorldCapBetService.Data
                 var chartAverageStats = new ChartAverageStats();
                 var userStats = _context.Rankings.SingleOrDefault(r => r.User.Id == userId);
 
-                chartAverageStats.BarList = new List<GroupingBar>();
-                //chartAverageStats.BarList.Add(CreateAverageStatBar(userStats.Score, averageScore, "Score", user));
-                chartAverageStats.BarList.Add(CreateAverageStatBar(userStats.GoodPronosticAndGoodScore, averageGoodPronosticAndGoodScore, "Good Pronostic And Good Score", user));
-                chartAverageStats.BarList.Add(CreateAverageStatBar(userStats.GoodGoalAverage, averageGoodGoalAverage, "Good Goal Average", user));
-                chartAverageStats.BarList.Add(CreateAverageStatBar(userStats.GoodPronosticOnly, averageGoodPronosticOnly, "Good Pronostic Only", user));
-                chartAverageStats.BarList.Add(CreateAverageStatBar(userStats.FalsePronostic, averageFalsePronostic, "False Pronostic", user));
+                var barList = new List<GroupingBar>
+                {
+                    CreateAverageStatBar(userStats.GoodPronosticAndGoodScore, averageGoodPronosticAndGoodScore, "Good Pronostic And Good Score", user),
+                    CreateAverageStatBar(userStats.GoodGoalAverage, averageGoodGoalAverage, "Good Goal Average", user),
+                    CreateAverageStatBar(userStats.GoodPronosticOnly, averageGoodPronosticOnly, "Good Pronostic Only", user),
+                    CreateAverageStatBar(userStats.FalsePronostic, averageFalsePronostic, "False Pronostic", user)
+                };
 
-                return chartAverageStats;
+                return barList;
             }
             return null;
         }
@@ -48,9 +48,11 @@ namespace WorldCapBetService.Data
         {
             var userName = user.FirstName + " " + user.LastName;
 
-            var groupingBar = new GroupingBar();
-            groupingBar.Name = groupingName;
-            groupingBar.Series = new List<Bar>();
+            var groupingBar = new GroupingBar
+            {
+                Name = groupingName,
+                Series = new List<Bar>()
+            };
             var userBar = new Bar(userName, userStat);
             var averageBar = new Bar("Average", averageStat);
 
