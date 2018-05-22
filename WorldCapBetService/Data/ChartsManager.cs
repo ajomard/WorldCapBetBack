@@ -25,14 +25,15 @@ namespace WorldCapBetService.Data
                 var averageScore = allRankings.Average(r => r.Score);
 
                 var userStats = _context.Rankings.SingleOrDefault(r => r.User.Id == userId);
-
-                var barList = new List<Bar>
+                if (userStats != null)
                 {
-                    new Bar(user.FirstName + " " + user.LastName, userStats.Score),
-                    new Bar("Average", averageScore)
-                };
-
-                return barList;
+                    var barList = new List<Bar>
+                    {
+                        new Bar(user.FirstName + " " + user.LastName, userStats.Score),
+                        new Bar("Average", averageScore)
+                    };
+                    return barList;
+                }
             }
             return null;
         }
@@ -50,16 +51,19 @@ namespace WorldCapBetService.Data
                 var averageScore = _context.Rankings.Average(r => r.Score);
 
                 var userStats = _context.Rankings.SingleOrDefault(r => r.User.Id == userId);
-
-                var barList = new List<GroupingBar>
+                if (userStats != null)
                 {
-                    CreateAverageStatBar(userStats.GoodPronosticAndGoodScore, averageGoodPronosticAndGoodScore, "Good Pronostic And Good Score", user),
-                    CreateAverageStatBar(userStats.GoodGoalAverage, averageGoodGoalAverage, "Good Goal Average", user),
-                    CreateAverageStatBar(userStats.GoodPronosticOnly, averageGoodPronosticOnly, "Good Pronostic Only", user),
-                    CreateAverageStatBar(userStats.FalsePronostic, averageFalsePronostic, "False Pronostic", user)
-                };
+                    var barList = new List<GroupingBar>
+                    {
+                        CreateAverageStatBar(userStats.GoodPronosticAndGoodScore, averageGoodPronosticAndGoodScore, "Good Pronostic And Good Score", user),
+                        CreateAverageStatBar(userStats.GoodGoalAverage, averageGoodGoalAverage, "Good Goal Average", user),
+                        CreateAverageStatBar(userStats.GoodPronosticOnly, averageGoodPronosticOnly, "Good Pronostic Only", user),
+                        CreateAverageStatBar(userStats.FalsePronostic, averageFalsePronostic, "False Pronostic", user)
+                    };
 
-                return barList;
+                    return barList;
+                }
+
             }
             return null;
         }
