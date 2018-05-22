@@ -19,11 +19,10 @@ namespace WorldCapBetService.Data
         public IList<Bar> GetAverageScoreFromUser(string userId)
         {
             var user = _context.User.SingleOrDefault(u => u.Id == userId);
-            if (user != null)
+            var allRankings = _context.Rankings.ToList();
+            if (user != null && allRankings.Count > 0)
             {
-                var allRankings = _context.Rankings.ToList();
                 var averageScore = allRankings.Average(r => r.Score);
-
                 var userStats = _context.Rankings.SingleOrDefault(r => r.User.Id == userId);
                 if (userStats != null)
                 {
@@ -41,9 +40,10 @@ namespace WorldCapBetService.Data
         public IList<GroupingBar> GetAverageStatsFromUser(string userId)
         {
             var user = _context.User.SingleOrDefault(u => u.Id == userId);
-            if (user != null)
+            var allRankings = _context.Rankings.ToList();
+            if (user != null && allRankings.Count > 0)
             {
-                var allRankings = _context.Rankings.ToList();
+
                 var averageGoodPronosticAndGoodScore = allRankings.Average(r => r.GoodPronosticAndGoodScore);
                 var averageGoodGoalAverage = _context.Rankings.Average(r => r.GoodGoalAverage);
                 var averageGoodPronosticOnly = _context.Rankings.Average(r => r.GoodPronosticOnly);
