@@ -140,6 +140,18 @@ namespace WorldCapBetService.Controllers
                 return NotFound();
             }
 
+            var ranking = await _context.Rankings.SingleOrDefaultAsync(r => r.User.Id == id);
+            if (ranking != null)
+            {
+                _context.Rankings.Remove(ranking);
+            }
+
+            var pronostics = _context.Pronostic.Where(p => p.User.Id == id).ToList();
+            if (pronostics.Count > 0)
+            {
+                _context.Pronostic.RemoveRange(pronostics);
+            }
+
             _context.User.Remove(user);
             await _context.SaveChangesAsync();
 
