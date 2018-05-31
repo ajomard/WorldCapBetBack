@@ -27,7 +27,7 @@ namespace WorldCapBetService.Data
                 var pronostic = pronostics.SingleOrDefault(p => p.Match.Id == match.Id);
 
                 result.Id = match.Id;
-                result.Date = match.Date;
+                result.Date = match.Date.ToUniversalTime();
                 result.Team1 = match.Team1;
                 result.Team2 = match.Team2;
                 result.ScoreTeam1 = match.ScoreTeam1;
@@ -53,7 +53,7 @@ namespace WorldCapBetService.Data
                 var pronostic = pronostics.SingleOrDefault(p => p.Match.Id == match.Id);
 
                 result.Id = match.Id;
-                result.Date = match.Date;
+                result.Date = match.Date.ToUniversalTime();
                 result.Team1 = match.Team1;
                 result.Team2 = match.Team2;
                 result.ScoreTeam1 = match.ScoreTeam1;
