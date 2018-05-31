@@ -53,8 +53,16 @@ namespace WorldCapBetService
             services.AddMvc().AddJsonOptions(o =>
                 {
                     o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                }
-                );
+                });
+            services.AddMvc(o =>
+            {
+                o.CacheProfiles.Add("Never",
+                    new CacheProfile()
+                    {
+                        Location = ResponseCacheLocation.None,
+                        NoStore = true,
+                    });
+            });
 
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {

@@ -25,6 +25,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Rankings
+        [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiUser")]
         [HttpGet]
         public IEnumerable<Ranking> GetRankings()
@@ -33,6 +34,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Rankings/5
+        [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiUser")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRanking([FromRoute] int id)
@@ -53,6 +55,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/UserRanking/5
+        [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiUser")]
         [HttpGet("UserRanking/{userId}")]
         public ActionResult GetUserRanking([FromRoute] string userId)

@@ -25,6 +25,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Matches
+        [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiAdmin")]
         [HttpGet]
         public IEnumerable<Match> GetMatch()
@@ -35,6 +36,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Matches/5
+        [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiAdmin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMatch([FromRoute] long id)
@@ -136,6 +138,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Pronostic/5
+        [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiUser")]
         [HttpGet("Pronostic/{id}")]
         public IActionResult GetMatchesWithPronosticFromUser([FromRoute] string id)
@@ -162,6 +165,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Pronostic/5
+        [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiUser")]
         [HttpGet("TodayPronostic/{id}")]
         public IActionResult GetTodayMatchesWithPronosticFromUser([FromRoute] string id)

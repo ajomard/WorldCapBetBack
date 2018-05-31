@@ -32,6 +32,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Users
+        [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiAdmin")]
         [HttpGet]
         public IEnumerable<User> GetUser()
@@ -40,6 +41,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Users/5
+        [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiUser")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser([FromRoute] string id)

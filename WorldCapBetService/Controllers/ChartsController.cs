@@ -23,6 +23,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/ChartsAvererage/5
+        [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiUser")]
         [HttpGet("Average/{userId}")]
         public ActionResult GetChartsAvererage([FromRoute] string userId)
@@ -44,6 +45,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/ChartsAvererage/5
+        [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiUser")]
         [HttpGet("AverageScore/{userId}")]
         public ActionResult GetChartsAvererageScore([FromRoute] string userId)

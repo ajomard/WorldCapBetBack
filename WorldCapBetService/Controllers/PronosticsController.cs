@@ -24,6 +24,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Pronostics
+        [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiUser")]
         [HttpGet]
         public IEnumerable<Pronostic> GetPronostic()
@@ -32,6 +33,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Pronostics/5
+        [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiUser")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPronostic([FromRoute] long id)

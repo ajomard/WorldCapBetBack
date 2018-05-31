@@ -21,7 +21,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Teams
-        //[Authorize(Policy = "ApiUser")]
+        [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiAdmin")]
         [HttpGet]
         public IEnumerable<Team> GetTeam()
@@ -30,7 +30,7 @@ namespace WorldCapBetService.Controllers
         }
 
         // GET: api/Teams/5
-        //[Authorize(Policy = "ApiUser")]
+        [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiAdmin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTeam([FromRoute] long id)
