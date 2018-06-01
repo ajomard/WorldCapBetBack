@@ -27,7 +27,8 @@ namespace WorldCapBetService.Data
                 rankList.Add(CaculateScoreFromOneUser(user));
             }
 
-            rankList = rankList.OrderByDescending(r => r.Score).ToList();
+            rankList = rankList.OrderByDescending(x => x.Score).ThenByDescending(x => x.GoodPronosticAndGoodScore).ThenByDescending(x => x.GoodGoalAverage)
+                .ThenByDescending(x => x.GoodPronosticOnly).ToList();
             var rank = 1;
             foreach (var ranking in rankList)
             {
