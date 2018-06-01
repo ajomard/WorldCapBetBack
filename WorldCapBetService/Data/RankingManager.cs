@@ -51,6 +51,8 @@ namespace WorldCapBetService.Data
                 var goalAveragePronostic = Math.Abs((decimal)pronostic.ScoreTeam1 - (decimal)pronostic.ScoreTeam2);
                 var isTeam1Winner = pronostic.Match.ScoreTeam1 > pronostic.Match.ScoreTeam2;
                 var isPronosticTeam1Winner = pronostic.ScoreTeam1 > pronostic.ScoreTeam2;
+                var isTeam2Winner = pronostic.Match.ScoreTeam1 < pronostic.Match.ScoreTeam2;
+                var isPronosticTeam2Winner = pronostic.ScoreTeam1 < pronostic.ScoreTeam2;
                 var isDraw = pronostic.Match.ScoreTeam1 == pronostic.Match.ScoreTeam2;
                 var isDrawPronostic = pronostic.ScoreTeam1 == pronostic.ScoreTeam2;
 
@@ -60,13 +62,13 @@ namespace WorldCapBetService.Data
                 {
                     userScore.GoodPronosticAndGoodScore++;
                 }
-                else if ((isTeam1Winner && isPronosticTeam1Winner || !isTeam1Winner && !isPronosticTeam1Winner) && goalAverage == goalAveragePronostic)
+                else if ((isTeam1Winner && isPronosticTeam1Winner || isTeam2Winner && isPronosticTeam2Winner || isDraw && isDrawPronostic) && goalAverage == goalAveragePronostic)
                 {
                     userScore.GoodGoalAverage++;
                 }
-                else if ((isTeam1Winner && !isDraw && isPronosticTeam1Winner && !isDrawPronostic) ||
-                     (!isTeam1Winner && !isDraw && !isPronosticTeam1Winner && !isDrawPronostic) ||
-                     (isDraw && !isDrawPronostic))
+                else if ((isTeam1Winner && isPronosticTeam1Winner && pronostic.Match.ScoreTeam1 != pronostic.ScoreTeam1 && pronostic.Match.ScoreTeam2 != pronostic.ScoreTeam2
+                    || isTeam2Winner && isPronosticTeam2Winner && pronostic.Match.ScoreTeam1 != pronostic.ScoreTeam1 && pronostic.Match.ScoreTeam2 != pronostic.ScoreTeam2)
+                    && goalAverage != goalAveragePronostic)
                 {
                     userScore.GoodPronosticOnly++;
                 }
