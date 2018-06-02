@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+
 using WorldCapBetService.Models.Entities;
 using WorldCapBetService.ViewModels;
 
-namespace WorldCapBetService.Data
+namespace WorldCapBetService.BLL
 {
     public class ChartsManager
     {

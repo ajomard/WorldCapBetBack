@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WorldCapBetService.Auth;
-using WorldCapBetService.Data;
+using WorldCapBetService.BLL;
 using WorldCapBetService.Models.Entities;
+using WorldCapBetService.ViewModels;
 
 namespace WorldCapBetService.Controllers
 {
@@ -17,19 +19,24 @@ namespace WorldCapBetService.Controllers
     public class PronosticsController : Controller
     {
         private readonly Context _context;
+        private readonly IMapper _mapper;
 
-        public PronosticsController(Context context)
+        public PronosticsController(Context context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Pronostics
         [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiUser")]
         [HttpGet]
-        public IEnumerable<Pronostic> GetPronostic()
+        public IList<PronosticViewModel> GetPronostic()
         {
-            return _context.Pronostic.Include("Match").Include("User");
+            var pronostics = _context.Pronostic.Include("Match").Include("User");
+
+            var result = _mapper.Map<IList<PronosticViewModel>>(pronostics);
+            return result;
         }
 
         // GET: api/Pronostics/5
@@ -50,7 +57,9 @@ namespace WorldCapBetService.Controllers
                 return NotFound();
             }
 
-            return Ok(pronostic);
+            var result = _mapper.Map<PronosticViewModel>(pronostic);
+
+            return Ok(result);
         }
 
         // PUT: api/Pronostics/5
@@ -154,7 +163,7 @@ namespace WorldCapBetService.Controllers
             _context.Pronostic.Remove(pronostic);
             await _context.SaveChangesAsync();
 
-            return Ok(pronostic);
+            return Ok();
         }
 
         private bool PronosticExists(long id)

@@ -5,6 +5,7 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -23,7 +24,7 @@ using Microsoft.IdentityModel.Tokens;
 using NJsonSchema;
 using NSwag.AspNetCore;
 using WorldCapBetService.Auth;
-using WorldCapBetService.Data;
+using WorldCapBetService.BLL;
 using WorldCapBetService.Extensions;
 using WorldCapBetService.Helpers;
 using WorldCapBetService.Models;
@@ -133,6 +134,7 @@ namespace WorldCapBetService
             identityBuilder = new IdentityBuilder(identityBuilder.UserType, typeof(IdentityRole), identityBuilder.Services);
             identityBuilder.AddEntityFrameworkStores<Context>().AddDefaultTokenProviders();
 
+            services.AddAutoMapper();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

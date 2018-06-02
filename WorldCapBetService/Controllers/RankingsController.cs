@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WorldCapBetService.Data;
+using WorldCapBetService.BLL;
 using WorldCapBetService.Models.Entities;
+using WorldCapBetService.ViewModels;
 
 namespace WorldCapBetService.Controllers
 {
@@ -17,10 +19,12 @@ namespace WorldCapBetService.Controllers
     {
         private readonly Context _context;
         private readonly RankingManager _rankingManager;
+        private readonly IMapper _mapper;
 
-        public RankingsController(Context context)
+        public RankingsController(Context context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
             _rankingManager = new RankingManager(context);
         }
 
@@ -28,9 +32,12 @@ namespace WorldCapBetService.Controllers
         [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiUser")]
         [HttpGet]
-        public IEnumerable<Ranking> GetRankings()
+        public IList<RankingViewModel> GetRankings()
         {
-            return _context.Rankings.Include("User").OrderBy(r => r.Rank);
+            var rankings = _context.Rankings.Include("User").OrderBy(r => r.Rank);
+
+            var result = _mapper.Map<IList<RankingViewModel>>(rankings);
+            return result;
         }
 
         // GET: api/Rankings/5
@@ -51,29 +58,33 @@ namespace WorldCapBetService.Controllers
                 return NotFound();
             }
 
-            return Ok(ranking);
+            var result = _mapper.Map<RankingViewModel>(ranking);
+
+            return Ok(result);
         }
 
         // GET: api/UserRanking/5
         [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiUser")]
         [HttpGet("UserRanking/{userId}")]
-        public ActionResult GetUserRanking([FromRoute] string userId)
+        public IActionResult GetUserRanking([FromRoute] string userId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            //var ranking = _context.Rankings.Include("User").Where(r => r.User.Id == userId);
             var ranking = _context.Rankings.Include("User").Where(r => r.User.Id == userId);
-
 
             if (ranking == null)
             {
                 return NotFound();
             }
 
-            return Ok(ranking);
+            var result = _mapper.Map<IList<RankingViewModel>>(ranking);
+
+            return Ok(result);
         }
 
         // PUT: api/Rankings/5
@@ -147,7 +158,7 @@ namespace WorldCapBetService.Controllers
             _context.Rankings.Remove(ranking);
             await _context.SaveChangesAsync();
 
-            return Ok(ranking);
+            return Ok();
         }
 
         private bool RankingExists(int id)

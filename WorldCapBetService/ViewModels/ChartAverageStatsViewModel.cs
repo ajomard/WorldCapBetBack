@@ -3,19 +3,9 @@ using WorldCapBetService.Models.Entities;
 
 namespace WorldCapBetService.ViewModels
 {
-    public class ChartAverageStats
+    public class ChartAverageStatsViewModel
     {
-        /*public Ranking UserStats { get; set; }
-
-        public double AverageScore { get; set; }
-        public double AverageFalsePronostic { get; set; }
-        public double AverageGoodPronosticOnly { get; set; }
-        public double AverageGoodGoalAverage { get; set; }
-        public double AverageGoodPronosticAndGoodScore { get; set; }*/
-
         public IList<GroupingBar> BarList { get; set; }
-
-
     }
 
     public class GroupingBar

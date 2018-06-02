@@ -2,12 +2,14 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WorldCapBetService.Auth;
-using WorldCapBetService.Data;
+using WorldCapBetService.BLL;
 using WorldCapBetService.Models.Entities;
+using WorldCapBetService.ViewModels;
 
 namespace WorldCapBetService.Controllers
 {
@@ -17,22 +19,30 @@ namespace WorldCapBetService.Controllers
     {
         private readonly Context _context;
         private readonly MatchManager _matchDAO;
+        private readonly IMapper _mapper;
 
-        public MatchesController(Context context)
+        public MatchesController(Context context, IMapper mapper)
         {
             _context = context;
-            _matchDAO = new MatchManager(context);
+            _matchDAO = new MatchManager(context, mapper);
+            _mapper = mapper;
         }
 
         // GET: api/Matches
         [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiAdmin")]
         [HttpGet]
-        public IEnumerable<Match> GetMatch()
+        public IList<MatchViewModel> GetMatch()
         {
-            var matches = _context.Match.Include("Team1").Include("Team2");
+            var matches = _context.Match.Include("Team1").Include("Team2").ToList();
+            var result = _mapper.Map<IList<MatchViewModel>>(matches);
 
-            return matches;
+            foreach (var match in result)
+            {
+                match.Date = match.Date.ToUniversalTime();
+            }
+
+            return result;
         }
 
         // GET: api/Matches/5
@@ -53,7 +63,10 @@ namespace WorldCapBetService.Controllers
                 return NotFound();
             }
 
-            return Ok(match);
+            var result = _mapper.Map<MatchViewModel>(match);
+            result.Date = result.Date.ToUniversalTime();
+
+            return Ok(result);
         }
 
         // PUT: api/Matches/5
@@ -129,7 +142,7 @@ namespace WorldCapBetService.Controllers
             _context.Match.Remove(match);
             await _context.SaveChangesAsync();
 
-            return Ok(match);
+            return Ok();
         }
 
         private bool MatchExists(long id)
@@ -190,6 +203,7 @@ namespace WorldCapBetService.Controllers
 
             return Ok(result);
         }
+
 
 
     }

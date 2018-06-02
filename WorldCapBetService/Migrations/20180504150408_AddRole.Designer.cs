@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
-using WorldCapBetService.Data;
+using WorldCapBetService.BLL;
 
 namespace WorldCapBetService.Migrations
 {

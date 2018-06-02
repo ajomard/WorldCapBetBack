@@ -4,13 +4,14 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WorldCapBetService.Auth;
-using WorldCapBetService.Data;
+using WorldCapBetService.BLL;
 using WorldCapBetService.Helpers;
 using WorldCapBetService.Models;
 using WorldCapBetService.Models.Entities;
@@ -24,10 +25,12 @@ namespace WorldCapBetService.Controllers
     {
         private readonly Context _context;
         private readonly UserManager<User> _userManager;
+        private readonly IMapper _mapper;
 
-        public UsersController(UserManager<User> userManager, Context context)
+        public UsersController(UserManager<User> userManager, Context context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
             _userManager = userManager;
         }
 
@@ -35,9 +38,12 @@ namespace WorldCapBetService.Controllers
         [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiAdmin")]
         [HttpGet]
-        public IEnumerable<User> GetUser()
+        public IEnumerable<UserViewModel> GetUser()
         {
-            return _context.User;
+            var users = _context.User;
+            var result = _mapper.Map<IList<UserViewModel>>(users);
+
+            return result;
         }
 
         // GET: api/Users/5
@@ -64,7 +70,9 @@ namespace WorldCapBetService.Controllers
                 return NotFound();
             }
 
-            return Ok(user);
+            var result = _mapper.Map<UserViewModel>(user);
+
+            return Ok(result);
         }
 
         // PUT: api/Users/5
@@ -157,7 +165,7 @@ namespace WorldCapBetService.Controllers
             _context.User.Remove(user);
             await _context.SaveChangesAsync();
 
-            return Ok(user);
+            return Ok();
         }
 
         // DELETE: api/Users/5

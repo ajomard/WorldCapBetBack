@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WorldCapBetService.Models.Entities;
 
-namespace WorldCapBetService.Data
+namespace WorldCapBetService.BLL
 {
     public class Context : DbContext
     {

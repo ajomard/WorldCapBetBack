@@ -5,7 +5,7 @@ using System.Linq;
 using WorldCapBetService.Models.Entities;
 using WorldCapBetService.ViewModels;
 
-namespace WorldCapBetService.Data
+namespace WorldCapBetService.BLL
 {
     public class RankingManager
     {

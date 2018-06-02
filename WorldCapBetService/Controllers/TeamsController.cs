@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WorldCapBetService.Data;
+using WorldCapBetService.BLL;
 using WorldCapBetService.Models.Entities;
+using WorldCapBetService.ViewModels;
 
 namespace WorldCapBetService.Controllers
 {
@@ -14,19 +16,24 @@ namespace WorldCapBetService.Controllers
     public class TeamsController : Controller
     {
         private readonly Context _context;
+        private readonly IMapper _mapper;
 
-        public TeamsController(Context context)
+        public TeamsController(Context context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Teams
         [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiAdmin")]
         [HttpGet]
-        public IEnumerable<Team> GetTeam()
+        public IEnumerable<TeamViewModel> GetTeam()
         {
-            return _context.Team.OrderBy(t => t.Name);
+            var teams = _context.Team.OrderBy(t => t.Name);
+
+            var result = _mapper.Map<IList<TeamViewModel>>(teams);
+            return result;
         }
 
         // GET: api/Teams/5
@@ -47,7 +54,10 @@ namespace WorldCapBetService.Controllers
                 return NotFound();
             }
 
-            return Ok(team);
+
+            var result = _mapper.Map<TeamViewModel>(team);
+
+            return Ok(result);
         }
 
         // PUT: api/Teams/5
@@ -125,7 +135,7 @@ namespace WorldCapBetService.Controllers
             _context.Team.Remove(team);
             await _context.SaveChangesAsync();
 
-            return Ok(team);
+            return Ok();
         }
 
         private bool TeamExists(long id)
