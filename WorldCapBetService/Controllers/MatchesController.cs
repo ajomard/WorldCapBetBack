@@ -138,6 +138,8 @@ namespace WorldCapBetService.Controllers
             {
                 return NotFound();
             }
+            var pronostics = _context.Pronostic.Where(p => p.Match.Id == match.Id);
+            _context.Pronostic.RemoveRange(pronostics);
 
             _context.Match.Remove(match);
             await _context.SaveChangesAsync();
