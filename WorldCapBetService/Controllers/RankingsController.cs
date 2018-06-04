@@ -74,15 +74,14 @@ namespace WorldCapBetService.Controllers
                 return BadRequest(ModelState);
             }
 
-            //var ranking = _context.Rankings.Include("User").Where(r => r.User.Id == userId);
-            var ranking = _context.Rankings.Include("User").Where(r => r.User.Id == userId);
+            var rankings = _rankingManager.GetAroundUserRanking(userId);
 
-            if (ranking == null)
+            if (rankings == null)
             {
                 return NotFound();
             }
 
-            var result = _mapper.Map<IList<RankingViewModel>>(ranking);
+            var result = _mapper.Map<IList<RankingViewModel>>(rankings);
 
             return Ok(result);
         }

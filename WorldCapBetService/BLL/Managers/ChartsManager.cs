@@ -33,7 +33,7 @@ namespace WorldCapBetService.BLL
                     return barList;
                 }
             }
-            return null;
+            return new List<Bar>();
         }
 
         public IList<GroupingBar> GetAverageStatsFromUser(string userId)
@@ -64,7 +64,7 @@ namespace WorldCapBetService.BLL
                 }
 
             }
-            return null;
+            return new List<GroupingBar>();
         }
 
         private GroupingBar CreateAverageStatBar(int userStat, double averageStat, string groupingName, User user)
