@@ -39,6 +39,18 @@ namespace WorldCapBetService.Controllers
             return result;
         }
 
+        // GET: api/Pronostics
+        [ResponseCache(CacheProfileName = "Never")]
+        [Authorize(Policy = "ApiUser")]
+        [HttpGet("match/{id}")]
+        public IList<PronosticViewModel> GetPronosticForMatch([FromRoute] long id)
+        {
+            var pronostics = _context.Pronostic.Include("Match").Include("User").Where(p => p.Match.Id == id);
+
+            var result = _mapper.Map<IList<PronosticViewModel>>(pronostics);
+            return result;
+        }
+
         // GET: api/Pronostics/5
         [ResponseCache(CacheProfileName = "Never")]
         [Authorize(Policy = "ApiUser")]

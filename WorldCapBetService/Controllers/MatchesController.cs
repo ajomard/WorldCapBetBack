@@ -47,7 +47,7 @@ namespace WorldCapBetService.Controllers
 
         // GET: api/Matches/5
         [ResponseCache(CacheProfileName = "Never")]
-        [Authorize(Policy = "ApiAdmin")]
+        [Authorize(Policy = "ApiUser")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMatch([FromRoute] long id)
         {
@@ -56,7 +56,7 @@ namespace WorldCapBetService.Controllers
                 return BadRequest(ModelState);
             }
 
-            var match = await _context.Match.SingleOrDefaultAsync(m => m.Id == id);
+            var match = await _context.Match.Include("Team1").Include("Team2").SingleOrDefaultAsync(m => m.Id == id);
 
             if (match == null)
             {
