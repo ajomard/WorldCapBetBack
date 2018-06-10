@@ -1,0 +1,1 @@
+﻿alter table dbo.Team add [Group] nvarchar;
