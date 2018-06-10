@@ -7,7 +7,9 @@ namespace WorldCapBetService.Models
 {
     public enum EnumMatchType
     {
-        Group,
-        Elimination
+        Group = 0,
+        Elimination = 1,
+        Friendly = 2,
+        Other = 3
     }
 }
