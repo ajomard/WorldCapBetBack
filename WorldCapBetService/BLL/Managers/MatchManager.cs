@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WorldCapBetService.Models;
+using WorldCapBetService.Models.Entities;
 using WorldCapBetService.ViewModels;
 
 namespace WorldCapBetService.BLL
@@ -52,6 +54,59 @@ namespace WorldCapBetService.BLL
 
             return result;
 
+        }
+
+        public IList<TeamRankingViewModel> GetTeamRankingOfGroup(string group)
+        {
+            var resultList = new List<TeamRankingViewModel>();
+            var teams = new Dictionary<long, TeamRankingViewModel>();
+            var groupMatches = _context.Match.Include("Team1").Include("Team2")
+                .Where(m => m.Team1.Group == group && m.Team2.Group == group && m.Type == EnumMatchType.Group).ToList();
+
+            foreach (Match match in groupMatches)
+            {
+                var team1 = teams.GetValueOrDefault(match.Team1.Id);
+                if (team1 == null)
+                {
+                    team1 = new TeamRankingViewModel(_mapper.Map<TeamViewModel>(match.Team1));
+
+                }
+
+                var team2 = teams.GetValueOrDefault(match.Team2.Id);
+                if (team2 == null)
+                {
+                    team2 = new TeamRankingViewModel(_mapper.Map<TeamViewModel>(match.Team2));
+
+                }
+
+                if (match.ScoreTeam1 > match.ScoreTeam2)
+                {
+                    team1.Win++;
+                    team2.Loose++;
+                    team1.Score = team1.Score + 3;
+                }
+                else if (match.ScoreTeam1 < match.ScoreTeam2)
+                {
+                    team1.Loose++;
+                    team2.Win++;
+                    team2.Score = team2.Score + 3;
+                }
+                else
+                {
+                    team1.Draw++;
+                    team2.Draw++;
+                    team1.Score++;
+                    team2.Score++;
+                }
+                team1.GoalAverage = team1.GoalAverage + (int)match.ScoreTeam1 - (int)match.ScoreTeam2;
+                team2.GoalAverage = team2.GoalAverage + (int)match.ScoreTeam2 - (int)match.ScoreTeam1;
+
+                teams.Add(team1.Team.Id, team1);
+                teams.Add(team2.Team.Id, team2);
+
+            }
+
+            return teams.Values.OrderByDescending(r => r.Score).ThenByDescending(r => r.GoalAverage).ToList();
         }
     }
 }

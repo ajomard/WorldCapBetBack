@@ -206,6 +206,27 @@ namespace WorldCapBetService.Controllers
             return Ok(result);
         }
 
+        // GET: api/Matchs/GroupRanking/A
+        [ResponseCache(CacheProfileName = "Never")]
+        [Authorize(Policy = "ApiUser")]
+        [HttpGet("GroupRanking/{group}")]
+        public IActionResult GetGroupRanking([FromRoute] string group)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = _matchDAO.GetTeamRankingOfGroup(group);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
 
 
     }
