@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WorldCapBetService.Models;
 using WorldCapBetService.Models.Entities;
 
 namespace WorldCapBetService.ViewModels
@@ -14,5 +15,7 @@ namespace WorldCapBetService.ViewModels
         public TeamViewModel Team2 { get; set; }
         public int? ScoreTeam1 { get; set; }
         public int? ScoreTeam2 { get; set; }
+        public EnumMatchType? Type { get; set; }
+        public string Title { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using WorldCapBetService.Models;
 using WorldCapBetService.Models.Entities;
 
 namespace WorldCapBetService.ViewModels
@@ -11,6 +12,8 @@ namespace WorldCapBetService.ViewModels
         public TeamViewModel Team2 { get; set; }
         public int? ScoreTeam1 { get; set; }
         public int? ScoreTeam2 { get; set; }
+        public EnumMatchType? Type { get; set; }
+        public string Title { get; set; }
 
         public PronosticViewModel Pronostic { get; set; }
     }
