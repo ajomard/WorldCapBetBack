@@ -79,34 +79,51 @@ namespace WorldCapBetService.BLL
 
                 }
 
-                if (match.ScoreTeam1 > match.ScoreTeam2)
+                if(match.ScoreTeam1 != null && match.ScoreTeam2 != null)
                 {
-                    team1.Win++;
-                    team2.Loose++;
-                    team1.Score = team1.Score + 3;
+                    if (match.ScoreTeam1 > match.ScoreTeam2)
+                    {
+                        team1.Win++;
+                        team2.Loose++;
+                        team1.Score = team1.Score + 3;
+                    }
+                    else if (match.ScoreTeam1 < match.ScoreTeam2)
+                    {
+                        team1.Loose++;
+                        team2.Win++;
+                        team2.Score = team2.Score + 3;
+                    }
+                    else
+                    {
+                        team1.Draw++;
+                        team2.Draw++;
+                        team1.Score++;
+                        team2.Score++;
+                    }
+                    team1.GoalAverage = team1.GoalAverage + (int)match.ScoreTeam1 - (int)match.ScoreTeam2;
+                    team2.GoalAverage = team2.GoalAverage + (int)match.ScoreTeam2 - (int)match.ScoreTeam1;
                 }
-                else if (match.ScoreTeam1 < match.ScoreTeam2)
-                {
-                    team1.Loose++;
-                    team2.Win++;
-                    team2.Score = team2.Score + 3;
-                }
-                else
-                {
-                    team1.Draw++;
-                    team2.Draw++;
-                    team1.Score++;
-                    team2.Score++;
-                }
-                team1.GoalAverage = team1.GoalAverage + (int)match.ScoreTeam1 - (int)match.ScoreTeam2;
-                team2.GoalAverage = team2.GoalAverage + (int)match.ScoreTeam2 - (int)match.ScoreTeam1;
 
-                teams.Add(team1.Team.Id, team1);
-                teams.Add(team2.Team.Id, team2);
+                AddOrUpdateValue(teams, team1);
+                AddOrUpdateValue(teams, team2);
+
+                
 
             }
 
             return teams.Values.OrderByDescending(r => r.Score).ThenByDescending(r => r.GoalAverage).ToList();
+        }
+
+        private static void AddOrUpdateValue(Dictionary<long, TeamRankingViewModel> dictionnary, TeamRankingViewModel value)
+        {
+            if (dictionnary.ContainsKey(value.Team.Id))
+            {
+                dictionnary[value.Team.Id] = value;
+            }
+            else
+            {
+                dictionnary.Add(value.Team.Id, value);
+            }
         }
     }
 }
