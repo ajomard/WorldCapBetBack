@@ -11,6 +11,8 @@ namespace WorldCapBetService.Models.Entities
         public Team Team2 { get; set; }
         public int? ScoreTeam1 { get; set; }
         public int? ScoreTeam2 { get; set; }
+        public EnumMatchType? Type { get; set; }
+        public string Title { get; set; }
 
         public ICollection<Pronostic> Pronostics { get; set; }
     }
