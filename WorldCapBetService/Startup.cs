@@ -136,7 +136,12 @@ namespace WorldCapBetService
             identityBuilder.AddEntityFrameworkStores<Context>().AddDefaultTokenProviders();
 
             services.AddAutoMapper();
-            services.AddHttpClient<ApiFootballDataClient>(client => client.BaseAddress = new Uri(Configuration["ApiFootballDataServiceUri"]));
+            //services.AddHttpClient<ApiFootballDataClient>(client => client.BaseAddress = new Uri(Configuration["ApiFootballDataServiceUri"]));
+            services.AddHttpClient<ApiFootballDataClient>(client =>
+            {
+                client.BaseAddress = new Uri(Configuration["ApiFootballDataServiceUri"]);
+                client.DefaultRequestHeaders.Add("X-Auth-Token", Configuration["ApiFootballDataServiceKey"]);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

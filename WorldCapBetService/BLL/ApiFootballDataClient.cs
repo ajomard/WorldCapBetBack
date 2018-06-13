@@ -36,6 +36,6 @@ namespace WorldCapBetService.BLL
                 return null;
             }
         }
-        
+
     }
 }

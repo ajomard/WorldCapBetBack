@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WorldCapBetService.Auth;
 using WorldCapBetService.BLL;
+using WorldCapBetService.BLL.Managers;
 using WorldCapBetService.Models.Entities;
 using WorldCapBetService.ViewModels;
 
@@ -19,12 +20,14 @@ namespace WorldCapBetService.Controllers
     {
         private readonly Context _context;
         private readonly MatchManager _matchDAO;
+        private readonly AutoUpdateManager _autoUpdate;
         private readonly IMapper _mapper;
 
-        public MatchesController(Context context, IMapper mapper)
+        public MatchesController(Context context, IMapper mapper, ApiFootballDataClient client)
         {
             _context = context;
             _matchDAO = new MatchManager(context, mapper);
+            _autoUpdate = new AutoUpdateManager(context, client);
             _mapper = mapper;
         }
 
@@ -228,12 +231,12 @@ namespace WorldCapBetService.Controllers
         }
 
         [ResponseCache(CacheProfileName = "Never")]
-        [HttpGet("test")]
-        public async Task<IActionResult> GetTestAsync([FromServices]ApiFootballDataClient client)
+        [HttpGet("AutoUpdateScore")]
+        public async Task<IActionResult> AutoUpdateScoreAsync()
         {
-            var values = await client.GetFixtures();
+            await _autoUpdate.AutoUpdateScores();
 
-            return Ok(values);
+            return Ok();
         }
 
     }
