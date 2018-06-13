@@ -227,7 +227,14 @@ namespace WorldCapBetService.Controllers
             return Ok(result);
         }
 
+        [ResponseCache(CacheProfileName = "Never")]
+        [HttpGet("test")]
+        public async Task<IActionResult> GetTestAsync([FromServices]ApiFootballDataClient client)
+        {
+            var values = await client.GetFixtures();
 
+            return Ok(values);
+        }
 
     }
 }
