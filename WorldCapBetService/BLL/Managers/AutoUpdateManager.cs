@@ -17,9 +17,11 @@ namespace WorldCapBetService.BLL.Managers
             _client = client;
         }
 
-        public async Task AutoUpdateScores()
+        public async Task<bool> AutoUpdateScores()
         {
-            var matchesToBeUpdated = _context.Match.Include("Team1").Include("Team2").Where(m => m.ScoreTeam1 == null && m.ScoreTeam2 == null && m.Date < DateTime.Now);
+            var isMatchUpdated = false;
+            //add 100 min => end of match
+            var matchesToBeUpdated = _context.Match.Include("Team1").Include("Team2").Where(m => m.ScoreTeam1 == null && m.ScoreTeam2 == null && m.Date.ToLocalTime().AddMinutes(100) < DateTime.Now);
             if (matchesToBeUpdated.Any())
             {
                 var apiDatas = await _client.GetFixtures();
@@ -35,11 +37,16 @@ namespace WorldCapBetService.BLL.Managers
                         matchToUpdate.ScoreTeam1 = (int)fixturesForMatch.Result.GoalsHomeTeam;
                         matchToUpdate.ScoreTeam2 = (int)fixturesForMatch.Result.GoalsAwayTeam;
                         _context.Entry(matchToUpdate).State = EntityState.Modified;
+                        isMatchUpdated = true;
                     }
                 }
-                await _context.SaveChangesAsync();
-            }
+                if (isMatchUpdated)
+                {
+                    await _context.SaveChangesAsync();
+                }
 
+            }
+            return isMatchUpdated;
         }
     }
 }

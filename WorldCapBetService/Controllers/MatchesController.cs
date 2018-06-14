@@ -20,6 +20,7 @@ namespace WorldCapBetService.Controllers
     {
         private readonly Context _context;
         private readonly MatchManager _matchDAO;
+        private readonly RankingManager _rankingManager;
         private readonly AutoUpdateManager _autoUpdate;
         private readonly IMapper _mapper;
 
@@ -28,6 +29,7 @@ namespace WorldCapBetService.Controllers
             _context = context;
             _matchDAO = new MatchManager(context, mapper);
             _autoUpdate = new AutoUpdateManager(context, client);
+            _rankingManager = new RankingManager(context);
             _mapper = mapper;
         }
 
@@ -234,8 +236,11 @@ namespace WorldCapBetService.Controllers
         [HttpGet("AutoUpdateScore")]
         public async Task<IActionResult> AutoUpdateScoreAsync()
         {
-            await _autoUpdate.AutoUpdateScores();
-
+            var rankingToBeRefreshed = await _autoUpdate.AutoUpdateScores();
+            if (rankingToBeRefreshed)
+            {
+                _rankingManager.UpdateRankings();
+            }
             return Ok();
         }
 
