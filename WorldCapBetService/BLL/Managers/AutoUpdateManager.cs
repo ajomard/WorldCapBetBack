@@ -22,7 +22,7 @@ namespace WorldCapBetService.BLL.Managers
             var isMatchUpdated = false;
             //add 100 min => end of match
             //var matchesToBeUpdated = _context.Match.Include("Team1").Include("Team2").Where(m => m.ScoreTeam1 == null && m.ScoreTeam2 == null && m.Date.ToLocalTime().AddMinutes(100) < DateTime.Now);
-            var matchesToBeUpdated = _context.Match.Include("Team1").Include("Team2").Where(m => m.ScoreTeam1 == null && m.ScoreTeam2 == null && m.Date.Day == DateTime.Today.Day);
+            var matchesToBeUpdated = _context.Match.Include("Team1").Include("Team2").Where(m => m.ScoreTeam1 == null && m.ScoreTeam2 == null && m.Date.Day == DateTime.Today.Day && m.Date.Month == DateTime.Today.Month);
             if (matchesToBeUpdated.Any())
             {
                 var apiDatas = await _client.GetFixtures();
