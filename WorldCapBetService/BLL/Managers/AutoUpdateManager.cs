@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using WorldCapBetService.Models;
+using WorldCapBetService.Models.Entities;
 
 namespace WorldCapBetService.BLL.Managers
 {
@@ -19,10 +21,10 @@ namespace WorldCapBetService.BLL.Managers
 
         public async Task<bool> AutoUpdateScores()
         {
-            var isMatchUpdated = false;
-            //add 100 min => end of match
-            //var matchesToBeUpdated = _context.Match.Include("Team1").Include("Team2").Where(m => m.ScoreTeam1 == null && m.ScoreTeam2 == null && m.Date.ToLocalTime().AddMinutes(100) < DateTime.Now);
-            var matchesToBeUpdated = _context.Match.Include("Team1").Include("Team2").Where(m => m.ScoreTeam1 == null && m.ScoreTeam2 == null && m.Date.Day == DateTime.Today.Day && m.Date.Month == DateTime.Today.Month);
+            var listMatchesFinished = new List<bool>();
+            var updateRanking = false;
+            var updateDb = false;
+            var matchesToBeUpdated = _context.Match.Include("Team1").Include("Team2").Where(m => m.Date.Day == DateTime.Today.Day && m.Date.Month == DateTime.Today.Month);
             if (matchesToBeUpdated.Any())
             {
                 var apiDatas = await _client.GetFixtures();
@@ -32,22 +34,36 @@ namespace WorldCapBetService.BLL.Managers
                     //only one match
                     var fixturesForMatch = apiDatas.Fixtures.SingleOrDefault(f => f.Result.GoalsAwayTeam != null && f.Result.GoalsHomeTeam != null
                                                 && f.HomeTeamName == matchToUpdate.Team1.Name
-                                                && f.AwayTeamName == matchToUpdate.Team2.Name);
-                    if (fixturesForMatch != null)
+                                                && f.AwayTeamName == matchToUpdate.Team2.Name
+                                                && f.Status == Status.InPlay || f.Status == Status.Finished);
+                    if (fixturesForMatch != null && IsScoreDifferent(matchToUpdate, fixturesForMatch))
                     {
-                        matchToUpdate.ScoreTeam1 = (int)fixturesForMatch.Result.GoalsHomeTeam;
-                        matchToUpdate.ScoreTeam2 = (int)fixturesForMatch.Result.GoalsAwayTeam;
+                        matchToUpdate.ScoreTeam1 = fixturesForMatch.Result.GoalsHomeTeam;
+                        matchToUpdate.ScoreTeam2 = fixturesForMatch.Result.GoalsAwayTeam;
                         _context.Entry(matchToUpdate).State = EntityState.Modified;
-                        isMatchUpdated = true;
+                        updateDb = true;
+                        //all matchs must be finished to update ranking
+                        listMatchesFinished.Add(fixturesForMatch.Status == Status.Finished);
                     }
                 }
-                if (isMatchUpdated)
+                if (updateDb)
                 {
                     await _context.SaveChangesAsync();
                 }
 
+                updateRanking = true;
+                //if all matchs not finished, do not update ranking
+                if (listMatchesFinished.Any(m => false))
+                {
+                    updateRanking = false;
+                }
             }
-            return isMatchUpdated;
+            return updateRanking;
+        }
+
+        private bool IsScoreDifferent(Match match, Fixture fixture)
+        {
+            return match.ScoreTeam1 != fixture.Result.GoalsHomeTeam || match.ScoreTeam2 != fixture.Result.GoalsAwayTeam;
         }
     }
 }

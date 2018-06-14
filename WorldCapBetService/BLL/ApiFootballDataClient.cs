@@ -28,8 +28,8 @@ namespace WorldCapBetService.BLL
                 //has already had its base address set.
                 var response = await _client.GetAsync("competitions/467/fixtures");
                 response.EnsureSuccessStatusCode();
-
-                return await response.Content.ReadAsAsync<ApiFootballData>();
+                var jsonString = await response.Content.ReadAsStringAsync();
+                return ApiFootballData.FromJson(jsonString);
             }
             catch (HttpRequestException ex)
             {

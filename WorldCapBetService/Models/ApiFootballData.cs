@@ -76,10 +76,10 @@ namespace WorldCapBetService.Models
     public partial class Result
     {
         [JsonProperty("goalsHomeTeam")]
-        public object GoalsHomeTeam { get; set; }
+        public int? GoalsHomeTeam { get; set; }
 
         [JsonProperty("goalsAwayTeam")]
-        public object GoalsAwayTeam { get; set; }
+        public int? GoalsAwayTeam { get; set; }
     }
 
     public partial class ApiFootballDataModelLinks
@@ -91,7 +91,7 @@ namespace WorldCapBetService.Models
         public Competition Competition { get; set; }
     }
 
-    public enum Status { Scheduled, Timed };
+    public enum Status { InPlay, Scheduled, Timed, Finished, Canceled, Postponed };
 
     public partial class ApiFootballData
     {
@@ -130,6 +130,14 @@ namespace WorldCapBetService.Models
                     return Status.Scheduled;
                 case "TIMED":
                     return Status.Timed;
+                case "CANCELED":
+                    return Status.Canceled;
+                case "IN_PLAY":
+                    return Status.InPlay;
+                case "POSTPONED":
+                    return Status.Postponed;
+                case "FINISHED":
+                    return Status.Finished;
             }
             throw new Exception("Cannot unmarshal type Status");
         }
@@ -143,6 +151,14 @@ namespace WorldCapBetService.Models
                     serializer.Serialize(writer, "SCHEDULED"); return;
                 case Status.Timed:
                     serializer.Serialize(writer, "TIMED"); return;
+                case Status.Canceled:
+                    serializer.Serialize(writer, "CANCELED"); return;
+                case Status.InPlay:
+                    serializer.Serialize(writer, "IN_PLAY"); return;
+                case Status.Postponed:
+                    serializer.Serialize(writer, "POSTPONED"); return;
+                case Status.Finished:
+                    serializer.Serialize(writer, "FINISHED"); return;
             }
             throw new Exception("Cannot marshal type Status");
         }
