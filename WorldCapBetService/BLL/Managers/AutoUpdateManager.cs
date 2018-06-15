@@ -35,7 +35,7 @@ namespace WorldCapBetService.BLL.Managers
                     var fixturesForMatch = apiDatas.Fixtures.SingleOrDefault(f => f.Result.GoalsAwayTeam != null && f.Result.GoalsHomeTeam != null
                                                 && f.HomeTeamName == matchToUpdate.Team1.Name
                                                 && f.AwayTeamName == matchToUpdate.Team2.Name
-                                                && f.Status == Status.InPlay || f.Status == Status.Finished);
+                                                && (f.Status == Status.InPlay || f.Status == Status.Finished));
                     if (fixturesForMatch != null && IsScoreDifferent(matchToUpdate, fixturesForMatch))
                     {
                         matchToUpdate.ScoreTeam1 = fixturesForMatch.Result.GoalsHomeTeam;
@@ -49,14 +49,15 @@ namespace WorldCapBetService.BLL.Managers
                 if (updateDb)
                 {
                     await _context.SaveChangesAsync();
+                    updateRanking = true;
                 }
 
-                updateRanking = true;
+                /*updateRanking = true;
                 //if all matchs not finished, do not update ranking
                 if (listMatchesFinished.Any(m => false))
                 {
                     updateRanking = false;
-                }
+                }*/
             }
             return updateRanking;
         }
