@@ -21,7 +21,7 @@ namespace WorldCapBetService.BLL.Managers
 
         public async Task<bool> AutoUpdateScores()
         {
-            var listMatchesFinished = new List<bool>();
+           // var listMatchesFinished = new List<bool>();
             var updateRanking = false;
             var updateDb = false;
             var matchesToBeUpdated = _context.Match.Include("Team1").Include("Team2").Where(m => m.Date.Day == DateTime.Today.Day && m.Date.Month == DateTime.Today.Month);
@@ -36,14 +36,21 @@ namespace WorldCapBetService.BLL.Managers
                                                 && f.HomeTeamName == matchToUpdate.Team1.Name
                                                 && f.AwayTeamName == matchToUpdate.Team2.Name
                                                 && (f.Status == Status.InPlay || f.Status == Status.Finished));
+
                     if (fixturesForMatch != null && IsScoreDifferent(matchToUpdate, fixturesForMatch))
                     {
                         matchToUpdate.ScoreTeam1 = fixturesForMatch.Result.GoalsHomeTeam;
                         matchToUpdate.ScoreTeam2 = fixturesForMatch.Result.GoalsAwayTeam;
+
+                        //because score is null when match beggining
+                        if (matchToUpdate.ScoreTeam1 == null)
+                            matchToUpdate.ScoreTeam1 = 0;
+                        if (matchToUpdate.ScoreTeam2 == null)
+                            matchToUpdate.ScoreTeam2 = 0;
                         _context.Entry(matchToUpdate).State = EntityState.Modified;
                         updateDb = true;
                         //all matchs must be finished to update ranking
-                        listMatchesFinished.Add(fixturesForMatch.Status == Status.Finished);
+                        //listMatchesFinished.Add(fixturesForMatch.Status == Status.Finished);
                     }
                 }
                 if (updateDb)
