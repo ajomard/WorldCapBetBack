@@ -14,6 +14,7 @@ namespace WorldCapBetService.ViewModels
         public int? ScoreTeam2 { get; set; }
         public EnumMatchType? Type { get; set; }
         public string Title { get; set; }
+        public EnumMatchStatus? Status { get; set; }
 
         public PronosticViewModel Pronostic { get; set; }
     }

@@ -21,7 +21,7 @@ namespace WorldCapBetService.BLL.Managers
 
         public async Task<bool> AutoUpdateScores()
         {
-           // var listMatchesFinished = new List<bool>();
+            // var listMatchesFinished = new List<bool>();
             var updateRanking = false;
             var updateDb = false;
             var matchesToBeUpdated = _context.Match.Include("Team1").Include("Team2").Where(m => m.Date.Day == DateTime.Today.Day && m.Date.Month == DateTime.Today.Month);
@@ -37,12 +37,12 @@ namespace WorldCapBetService.BLL.Managers
                                                 && f.AwayTeamName == matchToUpdate.Team2.Name
                                                 && (f.Status == Status.InPlay || f.Status == Status.Finished));
 
-                    if (fixturesForMatch != null && IsScoreDifferent(matchToUpdate, fixturesForMatch))
+                    if (fixturesForMatch != null && (IsScoreDifferent(matchToUpdate, fixturesForMatch) || StatusChanged(matchToUpdate, fixturesForMatch)))
                     {
                         matchToUpdate.ScoreTeam1 = fixturesForMatch.Result.GoalsHomeTeam;
                         matchToUpdate.ScoreTeam2 = fixturesForMatch.Result.GoalsAwayTeam;
-
-                        //because score is null when match beggining
+                        matchToUpdate.Status = ConvertFixtureStatusToModelStatus(fixturesForMatch);
+                        //because score is sometime null in api when match beggining
                         if (matchToUpdate.ScoreTeam1 == null)
                             matchToUpdate.ScoreTeam1 = 0;
                         if (matchToUpdate.ScoreTeam2 == null)
@@ -72,6 +72,24 @@ namespace WorldCapBetService.BLL.Managers
         private bool IsScoreDifferent(Match match, Fixture fixture)
         {
             return match.ScoreTeam1 != fixture.Result.GoalsHomeTeam || match.ScoreTeam2 != fixture.Result.GoalsAwayTeam;
+        }
+
+        private bool StatusChanged(Match match, Fixture fixture)
+        {
+            return match.Status != ConvertFixtureStatusToModelStatus(fixture);
+        }
+
+        private EnumMatchStatus ConvertFixtureStatusToModelStatus(Fixture fixture)
+        {
+            switch (fixture.Status)
+            {
+                case Status.InPlay:
+                    return EnumMatchStatus.InPlay;
+                case Status.Finished:
+                    return EnumMatchStatus.Finished;
+                default:
+                    return EnumMatchStatus.NotStarted;
+            }
         }
     }
 }

@@ -89,6 +89,15 @@ namespace WorldCapBetService.Controllers
                 return BadRequest();
             }
             match.Date = match.Date.ToLocalTime();
+            if (match.ScoreTeam1 != null || match.ScoreTeam2 != null)
+            {
+                match.Status = Models.EnumMatchStatus.Finished;
+            }
+            else
+            {
+                match.Status = Models.EnumMatchStatus.NotStarted;
+            }
+
             _context.Entry(match).State = EntityState.Modified;
 
             try
@@ -121,6 +130,16 @@ namespace WorldCapBetService.Controllers
             }
             _context.Entry(match.Team1).State = EntityState.Unchanged;
             _context.Entry(match.Team2).State = EntityState.Unchanged;
+
+            if (match.ScoreTeam1 != null || match.ScoreTeam2 != null)
+            {
+                match.Status = Models.EnumMatchStatus.Finished;
+            }
+            else
+            {
+                match.Status = Models.EnumMatchStatus.NotStarted;
+            }
+
             match.Date = match.Date.ToLocalTime();
             _context.Match.Add(match);
             await _context.SaveChangesAsync();
